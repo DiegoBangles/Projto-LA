@@ -48,10 +48,15 @@ void update(STATE *st) {
 int main() {
 	STATE st = {20,20};
 	WINDOW *wnd = initscr();
-	int ncols, nrows;
+	MAP map;
+	POS max;
+	int ncols, nrows,i,j;
 	getmaxyx(wnd,nrows,ncols);
 
-	srand48(time(NULL));
+	max.x = nrows;
+	max.y = ncols;
+
+	srand(time(NULL));
 	start_color();
 
 	cbreak();
@@ -65,6 +70,18 @@ int main() {
         init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
 
 	gerar(&st);
+
+	gerarMapa(&map,max);
+	fronteiras(&map,max);
+	ajustarMapa3(&map,max);
+	ajustarMapa(&map,max);
+	ajustarMapa(&map,max);
+	ajustarMapa(&map,max);
+	ajustarMapa2(&map,max);
+	ajustarMapa2(&map,max);
+	ajustarMapa4(&map,max);
+	fronteiras(&map,max);
+	
 
 	/**
 	 * Este código está muito mal escrito!
@@ -80,18 +97,21 @@ int main() {
 		printw("(%d, %d) %d %d", st.playerX, st.playerY, ncols, nrows);
 		attroff(COLOR_PAIR(COLOR_BLUE));
 		attron(COLOR_PAIR(COLOR_WHITE));
-		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
+
 		attroff(COLOR_PAIR(COLOR_WHITE));
 		attron(COLOR_PAIR(COLOR_YELLOW));
-		mvaddch(st.playerX - 1, st.playerY - 1, '.' | A_BOLD);
-		mvaddch(st.playerX - 1, st.playerY + 0, '.' | A_BOLD);
-		mvaddch(st.playerX - 1, st.playerY + 1, '.' | A_BOLD);
-		mvaddch(st.playerX + 0, st.playerY - 1, '.' | A_BOLD);
-		mvaddch(st.playerX + 0, st.playerY + 1, '.' | A_BOLD);
-		mvaddch(st.playerX + 1, st.playerY - 1, '.' | A_BOLD);
-		mvaddch(st.playerX + 1, st.playerY + 0, '.' | A_BOLD);
-		mvaddch(st.playerX + 1, st.playerY + 1, '.' | A_BOLD);
-                attroff(COLOR_PAIR(COLOR_YELLOW));
+
+		for (i=0;i<nrows-1;i++) {
+
+			for (j=0;j<ncols;j++) {
+
+				mvaddch(i, j, map.cord[i][j] | A_BOLD);
+
+			}
+
+		}
+		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
+        attroff(COLOR_PAIR(COLOR_YELLOW));
 		move(st.playerX, st.playerY);
 		update(&st);
 	}

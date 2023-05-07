@@ -13,4 +13,12 @@ typedef struct state {
 	int playerX;
 	int playerY;
 } STATE;
+
+typedef struct pos {
+	int x;
+	int y;
+} POS;
+
+
 #endif
+
