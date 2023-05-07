@@ -13,34 +13,35 @@
  *
  * Um pequeno exemplo que mostra o que se pode fazer
  */
-void do_movement_action(STATE *st, int dx, int dy) {
+void do_movement_action(STATE *st, int dx, int dy,MAP *map) {
+	if (map->cord[st->playerX + dx][st->playerY + dy] != '#') {
 	st->playerX += dx;
-	st->playerY += dy;
+	st->playerY += dy;}
 }
 
-void update(STATE *st) {
+void update(STATE *st,MAP *map) {
 	int key = getch();
 
 	mvaddch(st->playerX, st->playerY, ' ');
 	switch(key) {
 		case KEY_A1:
-		case '7': do_movement_action(st, -1, -1); break;
+		case '7': do_movement_action(st, -1, -1,map); break;
 		case KEY_UP:
-		case '8': do_movement_action(st, -1, +0); break;
+		case '8': do_movement_action(st, -1, +0,map); break;
 		case KEY_A3:
-		case '9': do_movement_action(st, -1, +1); break;
+		case '9': do_movement_action(st, -1, +1,map); break;
 		case KEY_LEFT:
-		case '4': do_movement_action(st, +0, -1); break;
+		case '4': do_movement_action(st, +0, -1,map); break;
 		case KEY_B2:
 		case '5': break;
 		case KEY_RIGHT:
-		case '6': do_movement_action(st, +0, +1); break;
+		case '6': do_movement_action(st, +0, +1,map); break;
 		case KEY_C1:
-		case '1': do_movement_action(st, +1, -1); break;
+		case '1': do_movement_action(st, +1, -1,map); break;
 		case KEY_DOWN:
-		case '2': do_movement_action(st, +1, +0); break;
+		case '2': do_movement_action(st, +1, +0,map); break;
 		case KEY_C3:
-		case '3': do_movement_action(st, +1, +1); break;
+		case '3': do_movement_action(st, +1, +1,map); break;
 		case 'q': endwin(); exit(0); break;
 	}
 }
@@ -113,7 +114,7 @@ int main() {
 		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
         attroff(COLOR_PAIR(COLOR_YELLOW));
 		move(st.playerX, st.playerY);
-		update(&st);
+		update(&st,&map);
 	}
 
 	return 0;
