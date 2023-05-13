@@ -67,10 +67,10 @@ int main() {
 	keypad(stdscr, true);
 
 	init_pair(COLOR_WHITE, COLOR_WHITE, COLOR_BLACK);
-        init_pair(COLOR_YELLOW, COLOR_YELLOW, COLOR_BLACK);
-        init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
+    init_pair(COLOR_YELLOW, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
 
-	gerar(&st);
+	
 
 	gerarMapa(&map,max);
 	fronteiras(&map,max);
@@ -83,7 +83,7 @@ int main() {
 	ajustarMapa4(&map,max);
 	fronteiras(&map,max);
 	
-
+	gerar(&st,&map,max);
 	/**
 	 * Este código está muito mal escrito!
 	 * Deveria existir uma função chamada draw_player!
@@ -98,21 +98,29 @@ int main() {
 		printw("(%d, %d) %d %d", st.playerX, st.playerY, ncols, nrows);
 		attroff(COLOR_PAIR(COLOR_BLUE));
 		attron(COLOR_PAIR(COLOR_WHITE));
-
-		attroff(COLOR_PAIR(COLOR_WHITE));
-		attron(COLOR_PAIR(COLOR_YELLOW));
-
+		radius(&map,&st,5);
+		radius2(&map,&st,5);
 		for (i=0;i<nrows-1;i++) {
 
 			for (j=0;j<ncols;j++) {
-
+				if (map.seen[i][j] == 1) {
 				mvaddch(i, j, map.cord[i][j] | A_BOLD);
+				} 
+				if (map.seen[i][j] == 2) {
+
+					attroff(COLOR_PAIR(COLOR_WHITE));
+					attron(COLOR_PAIR(COLOR_YELLOW));
+					mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					attroff(COLOR_PAIR(COLOR_YELLOW));
+					attron(COLOR_PAIR(COLOR_WHITE));
+				}
 
 			}
 
 		}
 		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
-        attroff(COLOR_PAIR(COLOR_YELLOW));
+
+		attroff(COLOR_PAIR(COLOR_WHITE));
 		move(st.playerX, st.playerY);
 		update(&st,&map);
 	}

@@ -3,13 +3,9 @@
 #include <unistd.h>
 #include <ncurses.h>
 #include <time.h>
+#include <math.h>
 
 #include "mapa.h"
-
-void gerar(STATE *s) {
-	s->playerX = 10;
-	s->playerY = 10;
-}
 
 int vizinhanca (MAP *map,int x,int y,int n) {
 
@@ -31,6 +27,16 @@ int vizinhanca (MAP *map,int x,int y,int n) {
 
 return count;
 
+}
+
+void gerar(STATE *s,MAP *map,POS max) {
+	int randomx = rand() % max.x;
+	int randomy = rand() % max.y;
+
+	if (vizinhanca(map,randomx,randomy,3) < 5) {
+		s->playerX = randomx;
+		s->playerY = randomy;
+	} else gerar(s,map,max);
 }
 
 int vizinhanca2 (MAP *map,int x,int y,int n) {
@@ -63,6 +69,7 @@ void gerarMapa (MAP *map,POS max) {
 				if (random <= 48) {map->cord[i][j] = '#';} 
 				else {map->cord[i][j] = '.';}
 
+				map->seen[i][j] = 0;
 				
 
 		}
@@ -198,10 +205,58 @@ void fronteiras (MAP *map,POS max) {
 
 }
 
+void radius (MAP *map, STATE *st,int radius) {
 
+	double i; int j,x,y;
+	for (i=0;i<6.28;i+=0.05) {
 
+		for (j=1;j<radius;j++) {
 
+			x = round(sin(i)*j);
+			y = round(cos(i)*j);
 
+			if (x==radius) {x=radius - 1;}
+			if (x==-radius) {x=-radius + 1;}
 
+			map->seen[st->playerX + x][st->playerY + y] = 2;
+
+			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
+
+				break;
+
+			}
+
+		}
+	}
+
+}
+
+void radius2 (MAP *map, STATE *st,int radius) {
+
+	double i; int j,x,y;
+	
+	for (i=0;i<6.28;i+=0.05) {
+
+		for (j=radius;j<radius+2;j++) {
+
+			x = round(sin(i)*j);
+			y = round(cos(i)*j);
+
+			if (map->seen[st->playerX + x][st->playerY + y] == 2) {
+
+				map->seen[st->playerX + x][st->playerY + y] = 1;
+
+			}
+
+			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
+
+				break;
+
+			}
+
+		}
+	}
+
+}
 
 
