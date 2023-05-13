@@ -12,6 +12,10 @@
 typedef struct state {
 	int playerX;
 	int playerY;
+	int health;
+	int maxhealth;
+	int light;
+	int damage;
 } STATE;
 
 typedef struct pos {

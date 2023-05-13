@@ -47,7 +47,7 @@ void update(STATE *st,MAP *map) {
 }
 
 int main() {
-	STATE st = {20,20};
+	STATE st;
 	WINDOW *wnd = initscr();
 	MAP map;
 	POS max;
@@ -84,27 +84,26 @@ int main() {
 	fronteiras(&map,max);
 	
 	gerar(&st,&map,max);
-	/**
-	 * Este código está muito mal escrito!
-	 * Deveria existir uma função chamada draw_player!
-	 *
-	 * Se estamos a desenhar uma luz à volta do jogador
-	 * deveria existir uma função chamada draw_light!
-	 *
-	 */
+
+	st.light = 5;
+	st.health = 10;
+	st.maxhealth = 10;
+	st.damage = 2;
+
 	while(1) {
 		move(nrows - 1, 0);
 		attron(COLOR_PAIR(COLOR_BLUE));
-		printw("(%d, %d) %d %d", st.playerX, st.playerY, ncols, nrows);
+		printw("(%d, %d) %d %d HP: %d/%d Light: %d Dmg: %d ", st.playerX, st.playerY, ncols, nrows, st.health,st.maxhealth,st.light,st.damage);
 		attroff(COLOR_PAIR(COLOR_BLUE));
 		attron(COLOR_PAIR(COLOR_WHITE));
-		radius(&map,&st,5);
-		radius2(&map,&st,5);
+		radius(&map,&st,st.light);
+		radius2(&map,&st,st.light);
+
 		for (i=0;i<nrows-1;i++) {
 
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] == 1) {
-				mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					mvaddch(i, j, map.cord[i][j] | A_BOLD);
 				} 
 				if (map.seen[i][j] == 2) {
 
