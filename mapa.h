@@ -1,16 +1,24 @@
 #include "state.h"
 
 
-
-
 #ifndef ___MAP_H___
 #define ___MAP_H___
+
+typedef struct mob{
+    char nome;
+    int vida;
+    int dano;
+    int posx;
+    int posy;
+} MOBS;
 
 typedef struct map{
     char cord[500][500];
     int seen[500][500];
     int distance[500][500];
+    MOBS mobs[50];
 } MAP;
+
 
 #endif
 
@@ -28,3 +36,11 @@ void fronteiras (MAP *map,POS max);
 void radius (MAP *map, STATE *st,int radius);
 void radius2 (MAP *map, STATE *st,int radius);
 void radiusdistance (MAP *map, STATE *st,int radius);
+
+void gerarMobs (MAP *map, POS max, STATE* st);
+
+void atualizarPos (STATE *st,MOBS *mob, MAP *map);
+
+void gerarSpawn(MOBS *s,MAP *map,POS max);
+
+

@@ -38,5 +38,6 @@
   "files.associations": {
     "unistd.h": "c",
     "stdlib.h": "c"
-  }
+  },
+  "C_Cpp.errorSquiggles": "enabled"
 }

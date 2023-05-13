@@ -212,6 +212,16 @@ void fronteiras (MAP *map,POS max) {
 
 	}
 
+	for (i=0;i<50;i++) {
+
+		map->mobs[i].nome = '\0';
+		map->mobs[i].vida = 0;
+		map->mobs[i].dano = 0;
+		map->mobs[i].posx = 0;
+		map->mobs[i].posy = 0;
+
+	}
+
 
 }
 
@@ -303,3 +313,96 @@ void radiusdistance (MAP *map, STATE *st,int radius) {
 }
 
 
+void gerarSpawn(MOBS *s,MAP *map,POS max) {
+	int randomx = rand() % max.x;
+	int randomy = rand() % max.y;
+
+	if (vizinhanca(map,randomx,randomy,3) < 5) {
+		s->posx = randomx;
+		s->posy = randomy;
+	} else gerarSpawn(s,map,max);
+}
+
+void gerarMobs (MAP *map, POS max, STATE* st) {
+    int i, numMobs, nivel, tipomob;
+    MOBS mob;
+
+    nivel = st->floor;
+
+    MOBS tiposMobs[3] = {
+        {'c', 10, 2,0,0},
+        {'S', 20, 5,0,0},
+        {'C', 30, 8,0,0},
+    };
+
+    numMobs = rand() % (2+nivel) + 1;
+    
+    for (i=0; i<numMobs; i++) {
+
+        tipomob = rand() % (nivel / 5 + 1);
+
+        mob.nome = tiposMobs[tipomob].nome;
+        mob.dano = tiposMobs[tipomob].dano + nivel * 3;
+        mob.vida = tiposMobs[tipomob].vida + nivel * 3;
+
+        map->mobs[i] = mob;
+
+        gerarSpawn(&mob,map,max);
+    }
+}
+
+void atualizarPos (STATE *st,MOBS *mob, MAP *map) {
+    int direcao, direcaoX, direcaoY,novox, novoy;
+    
+    if (map->distance[mob->posx][mob->posy] <= 20) {
+        if (map->distance[mob->posx][mob->posy] > 0) {
+            
+            direcaoX = st->playerX - mob->posx;
+            direcaoY = st->playerY - mob->posy;
+
+            if (abs(direcaoX) > abs(direcaoY)) {
+                if (direcaoX > 0 && map->cord[mob->posx+1][mob->posy] != '#') {
+                    mob->posx++;
+                } else if (direcaoX < 0 && map->cord[mob->posx-1][mob->posy] != '#') {
+                    mob->posx--;
+                }
+            } else {
+                if (direcaoY > 0 && map->cord[mob->posx][mob->posy+1] != '#') {
+                    mob->posy++;
+                } else if (direcaoY < 0 && map->cord[mob->posx][mob->posy-1] != '#') {
+                    mob->posy--;
+                }
+            }
+        }
+        else
+        {
+            //atacar player
+        }
+    }
+    else
+    {
+        direcao = rand() % 4;
+
+        novox = mob->posx;
+        novoy = mob->posy;
+
+        switch (direcao) {
+            case 0: //cima
+                if (map->cord[novox][novoy+1] != '#') {
+                    mob->posy++;
+                } break;
+            case 1://baixo
+                if (map->cord[novox][novoy-1] != '#') {
+                    mob->posy--;
+                } break;
+            case 2: //direita
+                if (map->cord[novox+1][novoy] != '#') {
+                    mob->posx++;
+                } break;
+            case 3: //esquerda
+                if (map->cord[novox-1][novoy] != '#') {
+                    mob->posx--;
+                } break;
+        }
+    }
+}

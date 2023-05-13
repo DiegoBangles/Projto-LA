@@ -90,6 +90,7 @@ int main() {
 	
 	gerar(&st,&map,max);
 	spawnporta(&map,max);
+	gerarMobs(&map,max,&st);
 
 	st.light = 5;
 	st.health = 10;
@@ -125,11 +126,29 @@ int main() {
 			}
 
 		}
+
+		/*for (i=0;i<50;i++) {
+
+			if (map.seen[map.mobs[i].posx][map.mobs[i].posy] == 2) {
+
+					attroff(COLOR_PAIR(COLOR_WHITE));
+					attron(COLOR_PAIR(COLOR_RED));
+					//mvaddch(map.mobs[i].posx, map.mobs[i].posy, map.mobs[i].nome | A_BOLD);
+					attroff(COLOR_PAIR(COLOR_RED));
+					attron(COLOR_PAIR(COLOR_WHITE));
+
+			}
+
+			atualizarPos(&st,&map.mobs[i],&map);
+
+		}*/
+
 		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
 
 		attroff(COLOR_PAIR(COLOR_WHITE));
 		move(st.playerX, st.playerY);
 		update(&st,&map,max,wnd);
+		
 	}
 
 	return 0;
