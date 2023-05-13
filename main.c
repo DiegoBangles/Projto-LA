@@ -6,42 +6,47 @@
 
 #include "state.h"
 #include "mapa.h"
+#include "spawner.h"
 
 
 
-/**
- *
- * Um pequeno exemplo que mostra o que se pode fazer
- */
-void do_movement_action(STATE *st, int dx, int dy,MAP *map) {
+
+void do_movement_action(STATE *st, int dx, int dy,MAP *map,POS max,WINDOW *wnd) {
 	if (map->cord[st->playerX + dx][st->playerY + dy] != '#') {
-	st->playerX += dx;
-	st->playerY += dy;}
+		st->playerX += dx;
+		st->playerY += dy;
+	}
+	if (map->cord[st->playerX][st->playerY] == 'D') {
+		change_level(map,st,max,wnd);
+		st->floor++;
+	}
 }
 
-void update(STATE *st,MAP *map) {
+void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 	int key = getch();
 
 	mvaddch(st->playerX, st->playerY, ' ');
 	switch(key) {
 		case KEY_A1:
-		case '7': do_movement_action(st, -1, -1,map); break;
+		case '7': do_movement_action(st, -1, -1,map,max,wnd); break;
 		case KEY_UP:
-		case '8': do_movement_action(st, -1, +0,map); break;
+		case '8': do_movement_action(st, -1, +0,map,max,wnd); break;
 		case KEY_A3:
-		case '9': do_movement_action(st, -1, +1,map); break;
+		case '9': do_movement_action(st, -1, +1,map,max,wnd); break;
 		case KEY_LEFT:
-		case '4': do_movement_action(st, +0, -1,map); break;
+		case '4': do_movement_action(st, +0, -1,map,max,wnd); break;
 		case KEY_B2:
 		case '5': break;
 		case KEY_RIGHT:
-		case '6': do_movement_action(st, +0, +1,map); break;
+		case '6': do_movement_action(st, +0, +1,map,max,wnd); break;
 		case KEY_C1:
-		case '1': do_movement_action(st, +1, -1,map); break;
+		case '1': do_movement_action(st, +1, -1,map,max,wnd); break;
 		case KEY_DOWN:
-		case '2': do_movement_action(st, +1, +0,map); break;
+		case '2': do_movement_action(st, +1, +0,map,max,wnd); break;
 		case KEY_C3:
-		case '3': do_movement_action(st, +1, +1,map); break;
+		case '3': do_movement_action(st, +1, +1,map,max,wnd); break;
+		case 'p': st->light++; break;
+		case 'z': change_level(map,st,max,wnd); break;
 		case 'q': endwin(); exit(0); break;
 	}
 }
@@ -84,16 +89,18 @@ int main() {
 	fronteiras(&map,max);
 	
 	gerar(&st,&map,max);
+	spawnporta(&map,max);
 
 	st.light = 5;
 	st.health = 10;
 	st.maxhealth = 10;
 	st.damage = 2;
+	st.floor = 1;
 
 	while(1) {
 		move(nrows - 1, 0);
 		attron(COLOR_PAIR(COLOR_BLUE));
-		printw("(%d, %d) %d %d HP: %d/%d Light: %d Dmg: %d ", st.playerX, st.playerY, ncols, nrows, st.health,st.maxhealth,st.light,st.damage);
+		printw("(%d, %d) %d %d HP: %d/%d Light: %d Dmg: %d Floor: %d", st.playerX, st.playerY, ncols, nrows, st.health,st.maxhealth,st.light,st.damage,st.floor);
 		attroff(COLOR_PAIR(COLOR_BLUE));
 		attron(COLOR_PAIR(COLOR_WHITE));
 		radius(&map,&st,st.light);
@@ -121,7 +128,7 @@ int main() {
 
 		attroff(COLOR_PAIR(COLOR_WHITE));
 		move(st.playerX, st.playerY);
-		update(&st,&map);
+		update(&st,&map,max,wnd);
 	}
 
 	return 0;

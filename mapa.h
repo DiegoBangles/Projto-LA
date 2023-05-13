@@ -16,6 +16,7 @@ typedef struct map{
 void gerar(STATE *s,MAP *map,POS max);
 
 void gerarMapa (MAP *map,POS max);
+void spawnporta (MAP *map,POS max);
 int vizinhanca (MAP *map,int x,int y,int n);
 int vizinhanca2 (MAP *map,int x,int y,int n);
 void ajustarMapa (MAP *map,POS max);

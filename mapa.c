@@ -29,6 +29,17 @@ return count;
 
 }
 
+void spawnporta (MAP *map,POS max) {
+
+    int randomx = rand() % max.x;
+	int randomy = rand() % max.y;
+
+	if (vizinhanca(map,randomx,randomy,4) < 5) {
+		map->cord[randomx][randomy] = 'D';
+	} else spawnporta(map,max);
+
+}
+
 void gerar(STATE *s,MAP *map,POS max) {
 	int randomx = rand() % max.x;
 	int randomy = rand() % max.y;
@@ -68,8 +79,6 @@ void gerarMapa (MAP *map,POS max) {
 
 				if (random <= 48) {map->cord[i][j] = '#';} 
 				else {map->cord[i][j] = '.';}
-
-				map->seen[i][j] = 0;
 				
 
 		}
@@ -197,7 +206,7 @@ void fronteiras (MAP *map,POS max) {
 		for (j=0;j<max.y;j++) {
 
 			if (i==0 || i==max.x-2 || j==0 || j==max.y-1) {map->cord[i][j] = '#';}
-
+			map->seen[i][j] = 0;
 		}
 
 	}
