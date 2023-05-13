@@ -6,7 +6,7 @@
 
 #include "mapa.h"
 #include "state.h"
-#include "spawner.h"
+#include "changer.h"
 
 
 void change_level (MAP *map,STATE *st,POS max,WINDOW *wnd) {

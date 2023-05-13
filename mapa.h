@@ -9,6 +9,7 @@
 typedef struct map{
     char cord[500][500];
     int seen[500][500];
+    int distance[500][500];
 } MAP;
 
 #endif
@@ -26,3 +27,4 @@ void ajustarMapa4 (MAP *map,POS max);
 void fronteiras (MAP *map,POS max);
 void radius (MAP *map, STATE *st,int radius);
 void radius2 (MAP *map, STATE *st,int radius);
+void radiusdistance (MAP *map, STATE *st,int radius);

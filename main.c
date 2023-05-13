@@ -6,7 +6,7 @@
 
 #include "state.h"
 #include "mapa.h"
-#include "spawner.h"
+#include "changer.h"
 
 
 
@@ -105,6 +105,7 @@ int main() {
 		attron(COLOR_PAIR(COLOR_WHITE));
 		radius(&map,&st,st.light);
 		radius2(&map,&st,st.light);
+		radiusdistance(&map,&st,20);
 
 		for (i=0;i<nrows-1;i++) {
 

@@ -207,6 +207,7 @@ void fronteiras (MAP *map,POS max) {
 
 			if (i==0 || i==max.x-2 || j==0 || j==max.y-1) {map->cord[i][j] = '#';}
 			map->seen[i][j] = 0;
+			map->distance[i][j] = 0;
 		}
 
 	}
@@ -263,6 +264,39 @@ void radius2 (MAP *map, STATE *st,int radius) {
 
 			}
 
+		}
+	}
+
+}
+
+void radiusdistance (MAP *map, STATE *st,int radius) {
+
+	double i; int j,x,y;
+	
+	for (i=0;i<6.28;i+=0.05) {
+
+		for (j=1;j<radius + 4;j++) {
+
+			x = round(sin(i)*j);
+			y = round(cos(i)*j);
+
+			if (j < radius) {
+
+			 
+
+			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
+
+				break;
+
+			}
+
+			map->distance[st->playerX + x][st->playerY + y] = sqrt(x*x + y*y);
+			}
+			else {
+
+				map->distance[st->playerX + x][st->playerY + y] = 0;
+
+			}
 		}
 	}
 
