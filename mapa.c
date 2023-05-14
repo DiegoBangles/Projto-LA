@@ -396,36 +396,27 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 	}
 }
 
-void atualizarPos (STATE *st,MOBS *mob, MAP *map) {
-    int direcao, direcaoX, direcaoY,novox, novoy;
+void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
+    int direcao, direcaoX, direcaoY, novox, novoy;
     
-    if (map->distance[mob->posx][mob->posy] <= 20) {
-        if (map->distance[mob->posx][mob->posy] > 0) {
-            
-            direcaoX = st->playerX - mob->posx;
-            direcaoY = st->playerY - mob->posy;
+    if (map->distance[mob->posx][mob->posy] > 0) {
+        direcaoX = st->playerX - mob->posx;
+        direcaoY = st->playerY - mob->posy;
 
-            if (abs(direcaoX) > abs(direcaoY)) {
-                if (direcaoX > 0 && map->cord[mob->posx+1][mob->posy] != '#') {
-                    mob->posx++;
-                } else if (direcaoX < 0 && map->cord[mob->posx-1][mob->posy] != '#') {
-                    mob->posx--;
-                }
-            } else {
-                if (direcaoY > 0 && map->cord[mob->posx][mob->posy+1] != '#') {
-                    mob->posy++;
-                } else if (direcaoY < 0 && map->cord[mob->posx][mob->posy-1] != '#') {
-                    mob->posy--;
-                }
+        if (abs(direcaoX) > abs(direcaoY)) {
+            if (direcaoX > 0 && map->cord[mob->posx+1][mob->posy] != '#') {
+                mob->posx++;
+            } else if (direcaoX < 0 && map->cord[mob->posx-1][mob->posy] != '#') {
+                mob->posx--;
+            }
+        } else {
+            if (direcaoY > 0 && map->cord[mob->posx][mob->posy+1] != '#') {
+                mob->posy++;
+            } else if (direcaoY < 0 && map->cord[mob->posx][mob->posy-1] != '#') {
+                mob->posy--;
             }
         }
-        else
-        {
-            //atacar player
-        }
-    }
-    else
-    {
+    } else {
         direcao = rand() % 4;
 
         novox = mob->posx;
