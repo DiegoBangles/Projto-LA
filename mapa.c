@@ -324,42 +324,76 @@ void gerarSpawn(MOBS *s, MAP *map, POS max) {
 }
 
 void gerarMobs (MAP *map, POS max, STATE* st) {
-    int i, numMobs, nivel, tipomob;
+    int i, j, k, numMobs, nivel, tipomob;
     MOBS mob;
 
     nivel = st->floor;
 
-    MOBS tiposMobs[4] = {
+    MOBS tiposMobs[5] = {
         {'c', 10, 2,0,0},
         {'S', 20, 5,0,0},
         {'B', 30, 8,0,0},
+		{'M', 45, 10,0,0},
 		{'P', 50, 15,0,0},
     };
     
-    if (nivel % 4 == 0) {
-		mob.nome = tiposMobs[3].nome;
-		mob.dano = tiposMobs[3].dano + nivel * 3;
-		mob.vida = tiposMobs[3].vida + nivel * 3;
+    if (nivel % 15 == 0) {
+		numMobs = 2;
 
-		gerarSpawn(&mob, map, max);
-		map->mobs[0] = mob;
-	} 
- 
+		for (j=0; j<numMobs; j++) {
+
+            mob.nome = tiposMobs[4].nome;
+			mob.dano = tiposMobs[4].dano + nivel * 3;
+			mob.vida = tiposMobs[4].vida + nivel * 3;
+			
+            map->mobs[j] = mob;
+            gerarSpawn(&mob,map,max);
+		}
+	}
     else 
 	{
-        numMobs = nivel+2;
-        
-        for (i=0; i<numMobs; i++) {
-            tipomob = rand() % (nivel / 5 + 1);
+		if (nivel % 6 == 0) {
+			numMobs = nivel/2;
 
-            mob.nome = tiposMobs[tipomob].nome;
-            mob.dano = tiposMobs[tipomob].dano + nivel * 3;
-            mob.vida = tiposMobs[tipomob].vida + nivel * 3;
+			for (k=0; k<numMobs; k++) {
+				
+				if (k==1) {
+					mob.nome = tiposMobs[3].nome;
+					mob.dano = tiposMobs[3].dano + nivel * 2;
+					mob.vida = tiposMobs[3].vida + nivel * 2;
+					
+					map->mobs[k] = mob;
+					gerarSpawn(&mob,map,max);
+				}
+				else
+				{
+					tipomob = rand() % (nivel / 5 + 1);
+
+					mob.nome = tiposMobs[tipomob].nome;
+					mob.dano = tiposMobs[tipomob].dano + nivel * 3;
+					mob.vida = tiposMobs[tipomob].vida + nivel * 3;
+					
+					map->mobs[k] = mob;
+					gerarSpawn(&mob,map,max);
+				}
+			}
+		}
+		else
+		{
+			numMobs = nivel+2;
 			
-            map->mobs[i] = mob;
-            gerarSpawn(&mob,map,max);
-        }
-    }
+			for (i=0; i<numMobs; i++) {
+				tipomob = rand() % (nivel / 5 + 1);
+
+				mob.nome = tiposMobs[tipomob].nome;
+				mob.dano = tiposMobs[tipomob].dano + nivel * 3;
+				mob.vida = tiposMobs[tipomob].vida + nivel * 3;
+				
+				map->mobs[i] = mob;
+				gerarSpawn(&mob,map,max);
+			}
+    	}
+	}
 }
 
 void atualizarPos (STATE *st,MOBS *mob, MAP *map) {
