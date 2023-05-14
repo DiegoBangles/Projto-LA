@@ -74,6 +74,7 @@ int main() {
 	init_pair(COLOR_WHITE, COLOR_WHITE, COLOR_BLACK);
     init_pair(COLOR_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
+	init_pair(COLOR_RED, COLOR_RED, COLOR_BLACK);
 
 	
 
@@ -133,9 +134,9 @@ int main() {
 			if (map.seen[x][y] == 2) {
 
 					attroff(COLOR_PAIR(COLOR_WHITE));
-					attron(COLOR_PAIR(COLOR_BLUE));
+					attron(COLOR_PAIR(COLOR_RED));
 					mvaddch(x, y, map.mobs[i].nome | A_BOLD);
-					attroff(COLOR_PAIR(COLOR_BLUE));
+					attroff(COLOR_PAIR(COLOR_RED));
 					attron(COLOR_PAIR(COLOR_WHITE));
 
 			}
