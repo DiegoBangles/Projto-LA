@@ -294,13 +294,13 @@ void radiusdistance (MAP *map, STATE *st,int radius) {
 
 			 
 
-			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
+				if (map->cord[st->playerX + x][st->playerY + y] == '#') {
+					
+					break;
 
-				break;
+				}
 
-			}
-
-			map->distance[st->playerX + x][st->playerY + y] = sqrt(x*x + y*y);
+				map->distance[st->playerX + x][st->playerY + y] = sqrt(x*x + y*y);
 			}
 			else {
 
