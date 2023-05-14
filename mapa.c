@@ -313,14 +313,14 @@ void radiusdistance (MAP *map, STATE *st,int radius) {
 }
 
 
-void gerarSpawn(MOBS *s,MAP *map,POS max) {
-	int randomx = rand() % max.x;
-	int randomy = rand() % max.y;
+void gerarSpawn(MOBS *s, MAP *map, POS max) {
+    int randomx = rand() % max.x;
+    int randomy = rand() % max.y;
 
-	if (vizinhanca(map,randomx,randomy,3) < 5) {
-		s->posx = randomx;
-		s->posy = randomy;
-	} else gerarSpawn(s,map,max);
+    if (vizinhanca(map,randomx,randomy,3) < 5) {
+        s->posx = randomx;
+        s->posy = randomy;
+    } else gerarSpawn(s,map,max);
 }
 
 void gerarMobs (MAP *map, POS max, STATE* st) {
@@ -329,25 +329,36 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
     nivel = st->floor;
 
-    MOBS tiposMobs[3] = {
+    MOBS tiposMobs[4] = {
         {'c', 10, 2,0,0},
         {'S', 20, 5,0,0},
-        {'C', 30, 8,0,0},
+        {'B', 30, 8,0,0},
+		{'P', 50, 15,0,0},
     };
-
-    numMobs = rand() % (2+nivel) + 2; //por alguma razao o primeiro mob a ser feito spawnava em coordenadas em milhares, entao so gerei +1 que o normal e parei de ler o primeiro
     
-    for (i=0; i<numMobs; i++) {
+    if (nivel % 4 == 0) {
+		mob.nome = tiposMobs[3].nome;
+		mob.dano = tiposMobs[3].dano + nivel * 3;
+		mob.vida = tiposMobs[3].vida + nivel * 3;
 
-        tipomob = rand() % (nivel / 5 + 1);
+		gerarSpawn(&mob, map, max);
+		map->mobs[0] = mob;
+	} 
+ 
+    else 
+	{
+        numMobs = nivel+2;
+        
+        for (i=0; i<numMobs; i++) {
+            tipomob = rand() % (nivel / 5 + 1);
 
-        mob.nome = tiposMobs[tipomob].nome;
-        mob.dano = tiposMobs[tipomob].dano + nivel * 3;
-        mob.vida = tiposMobs[tipomob].vida + nivel * 3;
-
-        map->mobs[i] = mob;
-
-        gerarSpawn(&mob,map,max);
+            mob.nome = tiposMobs[tipomob].nome;
+            mob.dano = tiposMobs[tipomob].dano + nivel * 3;
+            mob.vida = tiposMobs[tipomob].vida + nivel * 3;
+			
+            map->mobs[i] = mob;
+            gerarSpawn(&mob,map,max);
+        }
     }
 }
 
