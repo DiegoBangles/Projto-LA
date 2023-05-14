@@ -337,7 +337,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 		{'P', 50, 15,0,0},
     };
     
-    if (nivel % 15 == 0) {
+    if (nivel % 15 == 0 && nivel>1) {
 		numMobs = 2;
 
 		for (j=0; j<numMobs; j++) {
