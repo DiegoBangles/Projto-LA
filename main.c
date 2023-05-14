@@ -127,23 +127,25 @@ int main() {
 
 		}
 
-		/*for (i=0;i<50;i++) {
-
-			if (map.seen[map.mobs[i].posx][map.mobs[i].posy] == 2) {
+		for (i=1;i<50;i++) {
+			int x = map.mobs[i].posx;
+			int y = map.mobs[i].posy;
+			if (map.seen[x][y] == 2) {
 
 					attroff(COLOR_PAIR(COLOR_WHITE));
-					attron(COLOR_PAIR(COLOR_RED));
-					//mvaddch(map.mobs[i].posx, map.mobs[i].posy, map.mobs[i].nome | A_BOLD);
-					attroff(COLOR_PAIR(COLOR_RED));
+					attron(COLOR_PAIR(COLOR_BLUE));
+					mvaddch(x, y, map.mobs[i].nome | A_BOLD);
+					attroff(COLOR_PAIR(COLOR_BLUE));
 					attron(COLOR_PAIR(COLOR_WHITE));
 
 			}
 
 			atualizarPos(&st,&map.mobs[i],&map);
 
-		}*/
+		}
 
 		mvaddch(st.playerX, st.playerY, '@' | A_BOLD);
+		//mvaddch(map.mobs[1].posx, map.mobs[1].posy, map.mobs[1].nome | A_BOLD);
 
 		attroff(COLOR_PAIR(COLOR_WHITE));
 		move(st.playerX, st.playerY);

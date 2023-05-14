@@ -335,7 +335,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
         {'C', 30, 8,0,0},
     };
 
-    numMobs = rand() % (2+nivel) + 1;
+    numMobs = rand() % (2+nivel) + 2; //por alguma razao o primeiro mob a ser feito spawnava em coordenadas em milhares, entao so gerei +1 que o normal e parei de ler o primeiro
     
     for (i=0; i<numMobs; i++) {
 
