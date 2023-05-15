@@ -397,48 +397,77 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 }
 
 void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
-    int direcao, direcaoX, direcaoY, novox, novoy;
+    int direcaoX, direcaoY;
     
     if (map->distance[mob->posx][mob->posy] > 0) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
 
         if (abs(direcaoX) > abs(direcaoY)) {
-            if (direcaoX > 0 && map->cord[mob->posx+1][mob->posy] != '#') {
-                mob->posx++;
-            } else if (direcaoX < 0 && map->cord[mob->posx-1][mob->posy] != '#') {
-                mob->posx--;
+            if (direcaoX > 0) {
+                if (map->cord[mob->posx+1][mob->posy] != '#') {
+					mob->posx++;
+				}
+				else
+				{
+					randomPos (mob,map);
+				}
+            } else if (direcaoX < 0) {
+                if (map->cord[mob->posx-1][mob->posy] != '#') {
+					mob->posx--;
+				}
+				else
+				{
+					randomPos (mob,map);
+				}
             }
         } else {
-            if (direcaoY > 0 && map->cord[mob->posx][mob->posy+1] != '#') {
-                mob->posy++;
-            } else if (direcaoY < 0 && map->cord[mob->posx][mob->posy-1] != '#') {
-                mob->posy--;
+            if (direcaoY > 0) {
+                if (map->cord[mob->posx][mob->posy+1] != '#') {
+					mob->posy++;
+				}
+				else
+				{
+					randomPos (mob,map);
+				}
+            } else if (direcaoY < 0) {
+                if (map->cord[mob->posx][mob->posy-1] != '#') {
+					mob->posy--;
+				}
+				else
+				{
+					randomPos (mob,map);
+				}
             }
         }
-    } else {
-        direcao = rand() % 4;
+    } 
+	else 
+	{
+        randomPos (mob,map);
+    }
+}
 
-        novox = mob->posx;
-        novoy = mob->posy;
+void randomPos (MOBS *mob, MAP *map){
+	int direcao;
+	
+	direcao = rand() % 4;
 
         switch (direcao) {
             case 0: //cima
-                if (map->cord[novox][novoy+1] != '#') {
+                if (map->cord[mob->posx][mob->posy+1] != '#') {
                     mob->posy++;
                 } break;
             case 1://baixo
-                if (map->cord[novox][novoy-1] != '#') {
+                if (map->cord[mob->posx][mob->posy-1] != '#') {
                     mob->posy--;
                 } break;
             case 2: //direita
-                if (map->cord[novox+1][novoy] != '#') {
+                if (map->cord[mob->posx+1][mob->posy] != '#') {
                     mob->posx++;
                 } break;
             case 3: //esquerda
-                if (map->cord[novox-1][novoy] != '#') {
+                if (map->cord[mob->posx-1][mob->posy] != '#') {
                     mob->posx--;
                 } break;
-        }
-    }
+	}
 }
