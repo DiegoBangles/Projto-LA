@@ -75,7 +75,7 @@ void gerarMapa (MAP *map,POS max) {
 
 		for (j=1;j<max.y;j++) {
 
-				int random = rand() % 100; //0-9
+				int random = rand() % 100; //0-99
 
 				if (random <= 48) {map->cord[i][j] = '#';} 
 				else {map->cord[i][j] = '.';}
@@ -237,8 +237,9 @@ void radius (MAP *map, STATE *st,int radius) {
 
 			if (x==radius) {x=radius - 1;}
 			if (x==-radius) {x=-radius + 1;}
-
-			map->seen[st->playerX + x][st->playerY + y] = 2;
+			if (map->seen[st->playerX + x][st->playerY + y] <= 2) {
+				map->seen[st->playerX + x][st->playerY + y] = 2;
+			}
 
 			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
 
@@ -309,6 +310,8 @@ void radiusdistance (MAP *map, STATE *st,int radius) {
 			}
 		}
 	}
+
+	map->distance[st->playerX][st->playerY] = -1;
 
 }
 
@@ -399,7 +402,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
     int direcaoX, direcaoY;
     
-    if (map->distance[mob->posx][mob->posy] > 0) {
+    if (map->distance[mob->posx][mob->posy] > 1) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
 
@@ -410,7 +413,7 @@ void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
 				}
 				else
 				{
-					randomPos (mob,map);
+					randomPos (st,mob,map);
 				}
             } else if (direcaoX < 0) {
                 if (map->cord[mob->posx-1][mob->posy] != '#') {
@@ -418,7 +421,7 @@ void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
 				}
 				else
 				{
-					randomPos (mob,map);
+					randomPos (st,mob,map);
 				}
             }
         } else {
@@ -428,7 +431,7 @@ void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
 				}
 				else
 				{
-					randomPos (mob,map);
+					randomPos (st,mob,map);
 				}
             } else if (direcaoY < 0) {
                 if (map->cord[mob->posx][mob->posy-1] != '#') {
@@ -436,38 +439,40 @@ void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
 				}
 				else
 				{
-					randomPos (mob,map);
+					randomPos (st,mob,map);
 				}
             }
         }
     } 
 	else 
 	{
-        randomPos (mob,map);
+        randomPos (st,mob,map);
     }
 }
 
-void randomPos (MOBS *mob, MAP *map){
+void randomPos (STATE *st,MOBS *mob, MAP *map){
 	int direcao;
 	
-	direcao = rand() % 4;
+	direcao = rand() % 5;
 
         switch (direcao) {
             case 0: //cima
-                if (map->cord[mob->posx][mob->posy+1] != '#') {
+                if (map->cord[mob->posx][mob->posy+1] != '#' && (mob->posx+1) != st->playerX && (mob->posy) != st->playerY) {
                     mob->posy++;
                 } break;
             case 1://baixo
-                if (map->cord[mob->posx][mob->posy-1] != '#') {
+                if (map->cord[mob->posx][mob->posy-1] != '#' && (mob->posx-1) != st->playerX && (mob->posy) != st->playerY)  {
                     mob->posy--;
                 } break;
             case 2: //direita
-                if (map->cord[mob->posx+1][mob->posy] != '#') {
+                if (map->cord[mob->posx+1][mob->posy] != '#' && (mob->posx) != st->playerX && (mob->posy +1) != st->playerY)  {
                     mob->posx++;
                 } break;
             case 3: //esquerda
-                if (map->cord[mob->posx-1][mob->posy] != '#') {
+                if (map->cord[mob->posx-1][mob->posy] != '#' && (mob->posx) != st->playerX && (mob->posy-1) != st->playerY)  {
                     mob->posx--;
                 } break;
+			case 4: //nada
+				break;
 	}
 }

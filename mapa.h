@@ -43,4 +43,4 @@ void atualizarPos (STATE *st,MOBS *mob, MAP *map);
 
 void gerarSpawn(MOBS *s,MAP *map,POS max);
 
-void randomPos (MOBS *mob, MAP *map);
+void randomPos (STATE *st,MOBS *mob, MAP *map);
