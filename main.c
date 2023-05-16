@@ -48,8 +48,8 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case '3': do_movement_action(st, +1, +1,map,max,wnd); break;
 		case 'e': atacar(st,map,1); break;
 		case 'w': atacardir(1,map,st); break;
-		case 'd': atacardir(2,map,st); break;
-		case 'a': atacardir(3,map,st); break;
+		case 'a': atacardir(2,map,st); break;
+		case 'd': atacardir(3,map,st); break;
 		case 's': atacardir(4,map,st); break;
 		case 'p': st->light++; break;
 		case 'q': endwin(); exit(0); break;

@@ -71,7 +71,7 @@ void atacardir (int dir, MAP *map,STATE *st) {
         }
 
     }
-       if (dir == 2) { //direita
+       else if (dir == 2) { //esquerda
 
         for (i=0;i<=st->radius;i++) {
 
@@ -90,7 +90,7 @@ void atacardir (int dir, MAP *map,STATE *st) {
         }
 
     }
-       if (dir == 3) { //esquerda
+       else if (dir == 3) { //direita
 
         for (i=0;i<=st->radius;i++) {
 
@@ -109,7 +109,7 @@ void atacardir (int dir, MAP *map,STATE *st) {
         }
 
     }
-       if (dir == 4) { //baixo
+       else if (dir == 4) { //baixo
 
         for (i=0;i<=st->radius;i++) {
 
