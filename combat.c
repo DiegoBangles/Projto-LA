@@ -71,5 +71,63 @@ void atacardir (int dir, MAP *map,STATE *st) {
         }
 
     }
+       if (dir == 2) { //direita
+
+        for (i=0;i<=st->radius;i++) {
+
+            for (k=1;k<50;k++) {
+
+                if (st->playerY-i == map->mobs[k].posy && st->playerX == map->mobs[k].posx) {
+
+                    map->mobs[k].vida -= st->damage;
+
+                }
+
+            }
+
+            map->seen[st->playerX][st->playerY-i] = 3;
+
+        }
+
+    }
+       if (dir == 3) { //esquerda
+
+        for (i=0;i<=st->radius;i++) {
+
+            for (k=1;k<50;k++) {
+
+                if (st->playerY+i == map->mobs[k].posy && st->playerX == map->mobs[k].posx) {
+
+                    map->mobs[k].vida -= st->damage;
+
+                }
+
+            }
+
+            map->seen[st->playerX][st->playerY+i] = 3;
+
+        }
+
+    }
+       if (dir == 4) { //baixo
+
+        for (i=0;i<=st->radius;i++) {
+
+            for (k=1;k<50;k++) {
+
+                if (st->playerY == map->mobs[k].posy && st->playerX+i == map->mobs[k].posx) {
+
+                    map->mobs[k].vida -= st->damage;
+
+                }
+
+            }
+
+            map->seen[st->playerX+i][st->playerY] = 3;
+
+        }
+
+    }
+
 
 }
