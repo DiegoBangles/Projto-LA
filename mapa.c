@@ -357,7 +357,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 			for (k=0; k<numMobs; k++) {
 				
-				if (k==1) {
+				if (k==1 || k==2) {
 					mob.nome = tiposMobs[3].nome;
 					mob.dano = tiposMobs[3].dano + nivel * 2;
 					mob.vida = tiposMobs[3].vida + nivel * 2;
@@ -449,25 +449,70 @@ void atualizarPos (STATE *st, MOBS *mob, MAP *map) {
 
 void randomPos (MOBS *mob, MAP *map){
 	int direcao;
-	
+	char anterior = 's';
+
 	direcao = rand() % 4;
 
         switch (direcao) {
             case 0: //cima
                 if (map->cord[mob->posx][mob->posy+1] != '#') {
-                    mob->posy++;
-                } break;
+                    if (anterior != 'b') {
+						mob->posy++;
+						anterior = 'c';
+					} 
+					else
+					{
+						randomPos (mob, map);	
+					} 
+				}
+				else
+				{
+					randomPos (mob, map);
+				} break;
             case 1://baixo
                 if (map->cord[mob->posx][mob->posy-1] != '#') {
-                    mob->posy--;
-                } break;
+                    if (anterior != 'c') {
+						mob->posy--;
+						anterior = 'b';
+					} 
+					else
+					{
+						randomPos (mob, map);	
+					}	
+				}
+				else
+				{
+					randomPos (mob, map);	
+				} break;
             case 2: //direita
                 if (map->cord[mob->posx+1][mob->posy] != '#') {
-                    mob->posx++;
-                } break;
+                    if (anterior != 'e') {
+						mob->posx++;
+						anterior = 'd';
+					} 
+					else
+					{
+						randomPos (mob, map);	
+					}
+				} 
+				else
+				{
+					randomPos (mob, map);	
+				} break;
             case 3: //esquerda
                 if (map->cord[mob->posx-1][mob->posy] != '#') {
-                    mob->posx--;
-                } break;
+                    if (anterior != 'd') {
+						mob->posx--;
+						anterior = 'e';
+					} 
+					else
+					{
+						randomPos (mob, map);	
+					}	
+				}
+				else
+				{
+					randomPos (mob, map);	
+				} break;
 	}
 }
