@@ -100,7 +100,7 @@ int main() {
 	st.health = 10;
 	st.maxhealth = 10;
 	st.damage = 2;
-	st.radius = 1;
+	st.radius = 3;
 	st.floor = 1;
 
 	while(1) {

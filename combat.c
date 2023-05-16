@@ -58,7 +58,7 @@ void atacardir (int dir, MAP *map,STATE *st) {
 
             for (k=1;k<50;k++) {
 
-                if (st->playerY+i == map->mobs[k].posy && st->playerX == map->mobs[k].posx) {
+                if (st->playerY == map->mobs[k].posy && st->playerX-i == map->mobs[k].posx) {
 
                     map->mobs[k].vida -= st->damage;
 
@@ -66,7 +66,7 @@ void atacardir (int dir, MAP *map,STATE *st) {
 
             }
 
-            map->seen[st->playerX][st->playerY+i] = 3;
+            map->seen[st->playerX-i][st->playerY] = 3;
 
         }
 
