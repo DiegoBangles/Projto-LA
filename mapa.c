@@ -237,8 +237,9 @@ void radius (MAP *map, STATE *st,int radius) {
 
 			if (x==radius) {x=radius - 1;}
 			if (x==-radius) {x=-radius + 1;}
-
-			map->seen[st->playerX + x][st->playerY + y] = 2;
+			if (map->seen[st->playerX + x][st->playerY + y] <= 2) {
+				map->seen[st->playerX + x][st->playerY + y] = 2;
+			}
 
 			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
 

@@ -16,6 +16,7 @@ typedef struct state {
 	int maxhealth;
 	int light;
 	int damage;
+	int radius;
 	int floor;
 } STATE;
 
