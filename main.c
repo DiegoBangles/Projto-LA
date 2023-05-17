@@ -7,6 +7,7 @@
 #include "state.h"
 #include "mapa.h"
 #include "changer.h"
+#include "combat.h"
 
 
 
@@ -19,6 +20,8 @@ void do_movement_action(STATE *st, int dx, int dy,MAP *map,POS max,WINDOW *wnd) 
 	if (map->cord[st->playerX][st->playerY] == 'D') {
 		change_level(map,st,max,wnd);
 		st->floor++;
+	} else if (map->cord[st->playerX][st->playerY] != '.') {
+		apanhaItem(st,map);
 	}
 }
 
@@ -45,6 +48,11 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case '2': do_movement_action(st, +1, +0,map,max,wnd); break;
 		case KEY_C3:
 		case '3': do_movement_action(st, +1, +1,map,max,wnd); break;
+		case 'e': atacar(st,map,1); break;
+		case 'w': atacardir(1,map,st); break;
+		case 'a': atacardir(2,map,st); break;
+		case 'd': atacardir(3,map,st); break;
+		case 's': atacardir(4,map,st); break;
 		case 'p': st->light++; break;
 		case 'z': change_level(map,st,max,wnd); break;
 		case 'q': endwin(); exit(0); break;
@@ -75,6 +83,8 @@ int main() {
     init_pair(COLOR_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
 	init_pair(COLOR_RED, COLOR_RED, COLOR_BLACK);
+	init_pair(COLOR_CYAN, COLOR_CYAN, COLOR_BLACK);
+	init_pair(COLOR_GREEN, COLOR_GREEN, COLOR_BLACK);
 
 	
 
@@ -92,11 +102,14 @@ int main() {
 	gerar(&st,&map,max);
 	spawnporta(&map,max);
 	gerarMobs(&map,max,&st);
+	gerarItem(&map,max,&st);
+
 
 	st.light = 5;
 	st.health = 10;
 	st.maxhealth = 10;
 	st.damage = 2;
+	st.radius = 3;
 	st.floor = 1;
 
 	while(1) {
@@ -113,15 +126,61 @@ int main() {
 
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] == 1) {
-					mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					if (map.cord[i][j]!= '.' && map.cord[i][j]!= '#' && map.cord[i][j]!= 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j]== 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else {
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					}
 				} 
 				if (map.seen[i][j] == 2) {
+					if (map.cord[i][j]!= '.' && map.cord[i][j]!= '#' && map.cord[i][j]!= 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j]== 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_YELLOW));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_YELLOW));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					}
+
+				}
+				if (map.seen[i][j] == 3) {
 
 					attroff(COLOR_PAIR(COLOR_WHITE));
-					attron(COLOR_PAIR(COLOR_YELLOW));
+					attron(COLOR_PAIR(COLOR_CYAN));
 					mvaddch(i, j, map.cord[i][j] | A_BOLD);
-					attroff(COLOR_PAIR(COLOR_YELLOW));
+					attroff(COLOR_PAIR(COLOR_CYAN));
 					attron(COLOR_PAIR(COLOR_WHITE));
+					map.seen[i][j] = 2;
+				}
+				if (map.seen[i][j] == 4) {
+
+					attroff(COLOR_PAIR(COLOR_WHITE));
+					attron(COLOR_PAIR(COLOR_RED));
+					mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					attroff(COLOR_PAIR(COLOR_RED));
+					attron(COLOR_PAIR(COLOR_WHITE));
+					map.seen[i][j] = 2;
 				}
 
 			}
@@ -131,7 +190,7 @@ int main() {
 		for (i=1;i<50;i++) {
 			int x = map.mobs[i].posx;
 			int y = map.mobs[i].posy;
-			if (map.seen[x][y] == 2) {
+			if (map.seen[x][y] >= 2) {
 
 					attroff(COLOR_PAIR(COLOR_WHITE));
 					attron(COLOR_PAIR(COLOR_RED));
