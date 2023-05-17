@@ -258,20 +258,16 @@ void radius2 (MAP *map, STATE *st,int radius) {
 	
 	for (i=0;i<6.28;i+=0.05) {
 
-		for (j=radius;j<radius+2;j++) {
+		for (j=radius;j<radius*2;j++) {
 
 			x = round(sin(i)*j);
 			y = round(cos(i)*j);
 
+			if (st->playerX + x < 0 || st->playerX + x > 500 || st->playerY + y < 0 || st->playerY + y > 500) {continue;}
+
 			if (map->seen[st->playerX + x][st->playerY + y] == 2) {
 
 				map->seen[st->playerX + x][st->playerY + y] = 1;
-
-			}
-
-			if (map->cord[st->playerX + x][st->playerY + y] == '#') {
-
-				break;
 
 			}
 
@@ -475,4 +471,99 @@ void randomPos (STATE *st,MOBS *mob, MAP *map){
 			case 4: //nada
 				break;
 	}
+}
+
+void gerarSpawn2(ITENS *s,MAP *map,POS max) {
+	int randomx = rand() % max.x;
+	int randomy = rand() % max.y;
+
+	if (vizinhanca(map,randomx,randomy,3) < 5) {
+		map->cord[randomx][randomy] = s->nome;
+	} else gerarSpawn2(s,map,max);
+}
+
+
+
+
+void gerarItem(MAP *map, POS max, STATE* st) { 
+	int i, tipo, nivel;
+	nivel = st->floor;
+	
+	ITENS tiposTocha[2] = {
+		{'T', 10}, //mudem a luminosidade como quiserem
+		{'t', 5},
+	};
+	
+	ITENS tiposArma[5] = { 
+		{'p', 2}, //mudem o dano como quiserem
+		{'f', 3},
+		{'F', 5},
+		{'m', 7},
+		{'s', 10},
+	};
+	
+	ITENS tiposCura[2] = { 
+		{'C', 4}, //mudem o aumento de vida como quiserem
+		{'c', 2},
+	};
+	
+	ITENS aumentaVida[1] = { 
+		{'v', 5}, 
+	};
+	
+	for (i=0; i<nivel; i++) {
+		tipo = nivel % 2;
+		gerarSpawn2(&tiposTocha[tipo],map,max);
+		gerarSpawn2(&tiposCura[tipo],map,max);
+		gerarSpawn2(&tiposCura[tipo],map,max);
+	}
+	
+	if (nivel == 1) gerarSpawn2(&tiposArma[0],map,max);
+	
+	if (nivel % 5 == 0) {
+		gerarSpawn2(&aumentaVida[1],map,max);
+		for (i=0; i<5; i++) {
+			gerarSpawn2(&tiposArma[nivel/5],map,max);
+		}
+	}
+}
+
+void apanhaItem(STATE *st,MAP *map) {
+	int i;
+	char tipoItem[10] = {'T', 't', 'p', 'f', 'F', 'm', 's', 'C', 'c', 'v'};
+
+	ITENS tiposTocha[2] = {
+		{'T', 2}, //mudem a luminosidade como quiserem
+		{'t', 1},
+	};
+	
+	ITENS tiposArma[5] = { 
+		{'p', 2}, //mudem o dano como quiserem
+		{'f', 3},
+		{'F', 5},
+		{'m', 7},
+		{'s', 10},
+	};
+	
+	ITENS tiposCura[2] = { 
+		{'C', 4}, //mudem o aumento de vida como quiserem
+		{'c', 2},
+	};
+	
+	ITENS aumentaVida[1] = { 
+		{'v', 5}, 
+	};
+
+	
+
+		for (i=0; i<10; i++) {
+			if (map->cord[st->playerX][st->playerY] == tipoItem[i]) {
+				if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 20) {st->light = 20;} else {st->light += tiposTocha[i].funcionalidade;}}
+				if (i==2 || i==3 || i==4 || i==5 || i==6) st->damage += tiposArma[i-2].funcionalidade;
+				if (i==7 || i==8) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-7].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-7].funcionalidade;}}
+				if (i==9) st->maxhealth += aumentaVida[i-9].funcionalidade;
+				map->cord[st->playerX][st->playerY] = '.';
+			}
+		}
+	
 }

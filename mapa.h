@@ -19,8 +19,13 @@ typedef struct map{
     MOBS mobs[50];
 } MAP;
 
+typedef struct itens {
+	char nome;
+	int funcionalidade;
+} ITENS;
 
 #endif
+
 
 void gerar(STATE *s,MAP *map,POS max);
 
@@ -44,3 +49,6 @@ void atualizarPos (STATE *st,MOBS *mob, MAP *map);
 void gerarSpawn(MOBS *s,MAP *map,POS max);
 
 void randomPos (STATE *st,MOBS *mob, MAP *map);
+void gerarSpawn2(ITENS *s,MAP *map,POS max);
+void gerarItem(MAP *map, POS max, STATE* st);
+void apanhaItem(STATE *st,MAP *map);

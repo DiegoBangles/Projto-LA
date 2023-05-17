@@ -8,7 +8,7 @@
 #include "state.h"
 
 void atacar (STATE *st, MAP *map,int raio){
-    int i,j,k,mobx,moby;
+    int i,j,k;
     int playerx=(st->playerX),playery=(st->playerY);
 
     for(i=-raio; i<=raio; i++){
@@ -18,11 +18,20 @@ void atacar (STATE *st, MAP *map,int raio){
             if (playery-j <= 0 && playery-j >= 499) {continue;}
             map->seen[playerx-i][playery-j] = 3;
                 for(k=1; k<50; k++){
-                    mobx = map -> mobs[k].posx;
-                    moby = map -> mobs[k].posy;
 
-                    if(mobx == i-playerx && moby == j-playery){
-                        (map -> mobs[k].vida) -=  (st -> damage);
+                    if(map->mobs[k].posx == playerx-i && map->mobs[k].posy == playery-j){
+                        (map->mobs[k].vida) -=  (st->damage);
+
+                        if (map->mobs[k].vida <= 0) {
+
+                            map->mobs[k].nome = '\0';
+                            map->mobs[k].vida = 0;
+                            map->mobs[k].dano = 0;
+                            map->mobs[k].posx = 0;
+                            map->mobs[k].posy = 0;
+                            //FAZER MOB DROPAR ALGUMA COISA
+                        }
+
                     }
                 }
         }
@@ -62,6 +71,16 @@ void atacardir (int dir, MAP *map,STATE *st) {
 
                     map->mobs[k].vida -= st->damage;
 
+                    if (map->mobs[k].vida <= 0) {
+
+                        map->mobs[k].nome = '\0';
+                        map->mobs[k].vida = 0;
+                        map->mobs[k].dano = 0;
+                        map->mobs[k].posx = 0;
+                        map->mobs[k].posy = 0;
+                        //FAZER MOB DROPAR ALGUMA COISA
+                    }
+
                 }
 
             }
@@ -80,6 +99,16 @@ void atacardir (int dir, MAP *map,STATE *st) {
                 if (st->playerY-i == map->mobs[k].posy && st->playerX == map->mobs[k].posx) {
 
                     map->mobs[k].vida -= st->damage;
+
+                    if (map->mobs[k].vida <= 0) {
+
+                        map->mobs[k].nome = '\0';
+                        map->mobs[k].vida = 0;
+                        map->mobs[k].dano = 0;
+                        map->mobs[k].posx = 0;
+                        map->mobs[k].posy = 0;
+                        //FAZER MOB DROPAR ALGUMA COISA
+                    }
 
                 }
 
@@ -100,6 +129,17 @@ void atacardir (int dir, MAP *map,STATE *st) {
 
                     map->mobs[k].vida -= st->damage;
 
+
+                    if (map->mobs[k].vida <= 0) {
+
+                        map->mobs[k].nome = '\0';
+                        map->mobs[k].vida = 0;
+                        map->mobs[k].dano = 0;
+                        map->mobs[k].posx = 0;
+                        map->mobs[k].posy = 0;
+                        //FAZER MOB DROPAR ALGUMA COISA
+                    }
+
                 }
 
             }
@@ -118,6 +158,17 @@ void atacardir (int dir, MAP *map,STATE *st) {
                 if (st->playerY == map->mobs[k].posy && st->playerX+i == map->mobs[k].posx) {
 
                     map->mobs[k].vida -= st->damage;
+
+                    if (map->mobs[k].vida <= 0) {
+
+                        map->mobs[k].nome = '\0';
+                        map->mobs[k].vida = 0;
+                        map->mobs[k].dano = 0;
+                        map->mobs[k].posx = 0;
+                        map->mobs[k].posy = 0;
+                        //FAZER MOB DROPAR ALGUMA COISA
+                    }
+
 
                 }
 

@@ -20,6 +20,8 @@ void do_movement_action(STATE *st, int dx, int dy,MAP *map,POS max,WINDOW *wnd) 
 	if (map->cord[st->playerX][st->playerY] == 'D') {
 		change_level(map,st,max,wnd);
 		st->floor++;
+	} else if (map->cord[st->playerX][st->playerY] != '.') {
+		apanhaItem(st,map);
 	}
 }
 
@@ -52,6 +54,7 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case 'd': atacardir(3,map,st); break;
 		case 's': atacardir(4,map,st); break;
 		case 'p': st->light++; break;
+		case 'z': change_level(map,st,max,wnd); break;
 		case 'q': endwin(); exit(0); break;
 	}
 }
@@ -81,6 +84,7 @@ int main() {
     init_pair(COLOR_BLUE, COLOR_BLUE, COLOR_BLACK);
 	init_pair(COLOR_RED, COLOR_RED, COLOR_BLACK);
 	init_pair(COLOR_CYAN, COLOR_CYAN, COLOR_BLACK);
+	init_pair(COLOR_GREEN, COLOR_GREEN, COLOR_BLACK);
 
 	
 
@@ -98,6 +102,8 @@ int main() {
 	gerar(&st,&map,max);
 	spawnporta(&map,max);
 	gerarMobs(&map,max,&st);
+	gerarItem(&map,max,&st);
+
 
 	st.light = 5;
 	st.health = 10;
@@ -120,15 +126,43 @@ int main() {
 
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] == 1) {
-					mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					if (map.cord[i][j]!= '.' && map.cord[i][j]!= '#' && map.cord[i][j]!= 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j]== 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else {
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+					}
 				} 
 				if (map.seen[i][j] == 2) {
+					if (map.cord[i][j]!= '.' && map.cord[i][j]!= '#' && map.cord[i][j]!= 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j]== 'D') {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_GREEN));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_GREEN));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					} else {
+						attroff(COLOR_PAIR(COLOR_WHITE));
+						attron(COLOR_PAIR(COLOR_YELLOW));
+						mvaddch(i, j, map.cord[i][j]);
+						attroff(COLOR_PAIR(COLOR_YELLOW));
+						attron(COLOR_PAIR(COLOR_WHITE));
+					}
 
-					attroff(COLOR_PAIR(COLOR_WHITE));
-					attron(COLOR_PAIR(COLOR_YELLOW));
-					mvaddch(i, j, map.cord[i][j] | A_BOLD);
-					attroff(COLOR_PAIR(COLOR_YELLOW));
-					attron(COLOR_PAIR(COLOR_WHITE));
 				}
 				if (map.seen[i][j] == 3) {
 

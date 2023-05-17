@@ -27,6 +27,7 @@ void change_level (MAP *map,STATE *st,POS max,WINDOW *wnd) {
 	gerar(st,map,max);
 	spawnporta(map,max);
 	gerarMobs(map,max,st);
+	gerarItem(map,max,st);
 
 
 }
