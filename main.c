@@ -106,8 +106,8 @@ int main() {
 
 
 	st.light = 5;
-	st.health = 10;
-	st.maxhealth = 10;
+	st.health = 20;
+	st.maxhealth = 20;
 	st.damage = 2;
 	st.radius = 3;
 	st.floor = 1;

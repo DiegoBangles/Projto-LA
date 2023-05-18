@@ -77,7 +77,7 @@ void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob) {
         dx = 1;
     }
 
-    for (i = 0; i <= radius+1; i++) {
+    for (i = 1; i <= radius; i++) {
 
         int targetX = mob->posx + (i * dx);
         int targetY = mob->posy + (i * dy);
@@ -87,10 +87,7 @@ void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob) {
             if (targetX == st->playerX && targetY == st->playerY) {
 
                 st->health -= mob->dano;
-                if (st->health <= 0) {
-
-                    // PLAYER DEATH
-                }
+                
             }
 
     }

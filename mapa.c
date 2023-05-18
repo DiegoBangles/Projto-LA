@@ -397,52 +397,54 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 void atualizarPos(STATE* st, MOBS* mob, MAP* map) {
     int direcaoX, direcaoY;
 
-    if (map->distance[mob->posx][mob->posy] > 1) {
+    if (map->distance[mob->posx][mob->posy] >= 1) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
 		int raio = mob->raio;
 
-        if (abs(direcaoX) >= raio || abs(direcaoY) >= raio) {
-            if (direcaoX <= raio) {
-                mobatacardir(3,raio,map,st,mob);
-            } else if (direcaoX >= -raio) {
-                mobatacardir(4,raio,map,st,mob);
-            } else if (direcaoY <= raio) {
-                mobatacardir(1,raio,map,st,mob);
-            } else if (direcaoY >= -raio) {
-                mobatacardir(2,raio,map,st,mob);
-            }
-        }
-
-        if (abs(direcaoX) > abs(direcaoY)) {
-            if (direcaoX > 0) {
-                if (map->cord[mob->posx + 1][mob->posy] != '#') {
-                    mob->posx++;
-                } else {
-                    randomPos(mob, map);
-                }
-            } else if (direcaoX < 0) {
-                if (map->cord[mob->posx - 1][mob->posy] != '#') {
-                    mob->posx--;
-                } else {
-                    randomPos(mob, map);
-                }
-            }
-        } else {
-            if (direcaoY > 0) {
-                if (map->cord[mob->posx][mob->posy + 1] != '#') {
-                    mob->posy++;
-                } else {
-                    randomPos(mob, map);
-                }
-            } else if (direcaoY < 0) {
-                if (map->cord[mob->posx][mob->posy - 1] != '#') {
-                    mob->posy--;
-                } else {
-                    randomPos(mob, map);
-                }
-            }
-        }
+        if (abs(direcaoX) <= raio && abs(direcaoY) <= raio) {
+			if (direcaoX < 0) {
+				mobatacardir(3, raio, map, st, mob); // Ataque à direita
+			} else if (direcaoX > 0) {
+				mobatacardir(2, raio, map, st, mob); // Ataque à esquerda
+			}
+			if (direcaoY < 0) {
+				mobatacardir(4, raio, map, st, mob); // Ataque para baixo
+			} else if (direcaoY > 0) {
+				mobatacardir(1, raio, map, st, mob); // Ataque para cima
+			}
+		}
+		else {
+			if (abs(direcaoX) > abs(direcaoY)) {
+				if (direcaoX > 0) {
+					if (map->cord[mob->posx + 1][mob->posy] != '#') {
+						mob->posx++;
+					} else {
+						randomPos(mob, map);
+					}
+				} else if (direcaoX < 0) {
+					if (map->cord[mob->posx - 1][mob->posy] != '#') {
+						mob->posx--;
+					} else {
+						randomPos(mob, map);
+					}
+				}
+			} else {
+				if (direcaoY > 0) {
+					if (map->cord[mob->posx][mob->posy + 1] != '#') {
+						mob->posy++;
+					} else {
+						randomPos(mob, map);
+					}
+				} else if (direcaoY < 0) {
+					if (map->cord[mob->posx][mob->posy - 1] != '#') {
+						mob->posy--;
+					} else {
+						randomPos(mob, map);
+					}
+				}
+			}
+		}
     } else {
 		
         randomPos(mob, map);
