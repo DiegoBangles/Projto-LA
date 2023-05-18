@@ -328,11 +328,11 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
     nivel = st->floor;
 
     MOBS tiposMobs[5] = {
-        {'C', 10, 2,0,0},
-        {'S', 20, 5,0,0},
-        {'D', 30, 8,0,0},
-		{'M', 45, 10,0,0},
-		{'P', 50, 15,0,0},
+        {'C', 10, 2,2,0,0},
+        {'S', 20, 5,2,0,0},
+        {'D', 30, 8,3,0,0},
+		{'M', 45, 10,4,0,0},
+		{'P', 50, 15,10,0,0},
     };
     
     if (nivel % 15 == 0 && nivel>1) {
@@ -397,19 +397,20 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 void atualizarPos(STATE* st, MOBS* mob, MAP* map) {
     int direcaoX, direcaoY;
 
-    if (map->distance[mob->posx][mob->posy] > 0) {
+    if (map->distance[mob->posx][mob->posy] > 1) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
+		int raio = mob->raio;
 
-        if (abs(direcaoX) == 1 || abs(direcaoY) == 1) {
-            if (direcaoX == 1) {
-                mobatacar(st, *mob, 1);
-            } else if (direcaoX == -1) {
-                mobatacar(st, *mob, 1);
-            } else if (direcaoY == 1) {
-                mobatacar(st, *mob, 1);
-            } else if (direcaoY == -1) {
-                mobatacar(st, *mob, 1);
+        if (abs(direcaoX) >= raio || abs(direcaoY) >= raio) {
+            if (direcaoX <= raio) {
+                mobatacardir(3,raio,map,st,mob);
+            } else if (direcaoX >= -raio) {
+                mobatacardir(4,raio,map,st,mob);
+            } else if (direcaoY <= raio) {
+                mobatacardir(1,raio,map,st,mob);
+            } else if (direcaoY >= -raio) {
+                mobatacardir(2,raio,map,st,mob);
             }
         }
 
@@ -443,6 +444,7 @@ void atualizarPos(STATE* st, MOBS* mob, MAP* map) {
             }
         }
     } else {
+		
         randomPos(mob, map);
     }
 }

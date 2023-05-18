@@ -8,6 +8,7 @@ typedef struct mob{
     char nome;
     int vida;
     int dano;
+    int raio;
     int posx;
     int posy;
 } MOBS;

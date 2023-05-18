@@ -188,6 +188,9 @@ int main() {
 		}
 
 		for (i=1;i<50;i++) {
+
+			if (map.mobs[i].nome == '\0') continue;;
+
 			int x = map.mobs[i].posx;
 			int y = map.mobs[i].posy;
 			if (map.seen[x][y] >= 2) {

@@ -62,6 +62,40 @@ void mobatacar(STATE* st, MOBS mob, int raio) {
     }
 }
 
+void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob) {
+    int i;
+    int dx = 0, dy = 0;
+
+    
+    if (dir == 1) { //cima
+        dx = -1;
+    } else if (dir == 2) { //esq
+        dy = -1;
+    } else if (dir == 3) { //dir
+        dy = 1;
+    } else if (dir == 4) { //baixo
+        dx = 1;
+    }
+
+    for (i = 0; i <= radius+1; i++) {
+
+        int targetX = mob->posx + (i * dx);
+        int targetY = mob->posy + (i * dy);
+
+        map->seen[targetX][targetY] = 4;
+
+            if (targetX == st->playerX && targetY == st->playerY) {
+
+                st->health -= mob->dano;
+                if (st->health <= 0) {
+
+                    // PLAYER DEATH
+                }
+            }
+
+    }
+}
+
 void atacardir(int dir, MAP* map, STATE* st) {
     int i, k;
     int dx = 0, dy = 0;
