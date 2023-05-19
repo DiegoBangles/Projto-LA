@@ -321,6 +321,19 @@ void gerarSpawn(MOBS *s, MAP *map, POS max) {
     } else gerarSpawn(s,map,max);
 }
 
+void gerarBossSpawn(MOBS *s, MAP *map, POS max) {
+    int randomx = rand() % (max.x/10);
+    int randomy = rand() % (max.y/10);
+
+	int fixedx = max.x/2 + randomx;
+	int fixedy = max.y/2 + randomy;
+
+    if (vizinhanca(map,fixedx,fixedy,5) < 5) {
+        s->posx = fixedx;
+        s->posy = fixedy;
+    } else gerarBossSpawn(s,map,max);
+}
+
 void gerarMobs (MAP *map, POS max, STATE* st) {
     int i, j, k, numMobs, nivel, tipomob;
     MOBS mob;
@@ -335,14 +348,24 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 		{'P', 50, 15,10,0,0},
     };
     
-    if (nivel % 15 == 0 && nivel>1) {
+    if (nivel == 25) {
+
+
+		mob.nome = tiposMobs[4].nome;
+		mob.dano = tiposMobs[4].dano;
+		mob.vida = tiposMobs[4].vida;
+
+        gerarBossSpawn(&mob,map,max);
+		map->mobs[49] = mob;
+
+	} else if (nivel % 15 == 0 && nivel>1) {
 		numMobs = 2;
 
 		for (j=0; j<numMobs; j++) {
 
-            mob.nome = tiposMobs[4].nome;
-			mob.dano = tiposMobs[4].dano + nivel*2;
-			mob.vida = tiposMobs[4].vida + nivel*2;
+            mob.nome = tiposMobs[3].nome;
+			mob.dano = tiposMobs[3].dano + nivel*2;
+			mob.vida = tiposMobs[3].vida + nivel*2;
 			
             map->mobs[j] = mob;
             gerarSpawn(&mob,map,max);
@@ -366,6 +389,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				else
 				{
 					tipomob = rand() % (nivel / 5 + 1);
+					if (tipomob >= 4) {tipomob = 3;}
 
 					mob.nome = tiposMobs[tipomob].nome;
 					mob.dano = tiposMobs[tipomob].dano + nivel;
@@ -382,6 +406,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 			
 			for (i=0; i<numMobs; i++) {
 				tipomob = rand() % (nivel / 5 + 1);
+				if (tipomob >= 4) {tipomob = 3;}
 
 				mob.nome = tiposMobs[tipomob].nome;
 				mob.dano = tiposMobs[tipomob].dano + nivel;
@@ -394,26 +419,15 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 	}
 }
 
-void atualizarPos(STATE* st, MOBS* mob, MAP* map) {
+void atualizarPos(STATE* st, MOBS* mob, MAP* map,WINDOW *wnd) {
     int direcaoX, direcaoY;
 
     if (map->distance[mob->posx][mob->posy] > 1) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
-		int raio = mob->raio;
-
-        if (abs(direcaoX) >= raio || abs(direcaoY) >= raio) {
-            if (direcaoX <= raio) {
-                mobatacardir(3,raio,map,st,mob);
-            } else if (direcaoX >= -raio) {
-                mobatacardir(4,raio,map,st,mob);
-            } else if (direcaoY <= raio) {
-                mobatacardir(1,raio,map,st,mob);
-            } else if (direcaoY >= -raio) {
-                mobatacardir(2,raio,map,st,mob);
-            }
-        }
-
+		if (abs(direcaoX) == 0 || abs(direcaoY) == 0) {
+			//mobatacar(st,map,mob,1);
+		}
         if (abs(direcaoX) > abs(direcaoY)) {
             if (direcaoX > 0) {
                 if (map->cord[mob->posx + 1][mob->posy] != '#') {
@@ -443,10 +457,14 @@ void atualizarPos(STATE* st, MOBS* mob, MAP* map) {
                 }
             }
         }
-    } else {
-		
-        randomPos(mob, map);
-    }
+    } else if (map->distance[mob->posx][mob->posy] == 1) {
+		int random = rand() %2;
+		if (random == 0) {
+			mobatacar(st,map,mob,1,wnd);
+		} else {
+        	randomPos(mob, map);
+		}
+    } else {randomPos(mob,map);}
 }
 
 void randomPos (MOBS *mob, MAP *map){
@@ -530,17 +548,16 @@ void gerarSpawn2(ITENS *s,MAP *map,POS max) {
 
 
 
-
 void gerarItem(MAP *map, POS max, STATE* st) { 
-	int i, tipo, nivel;
+	int i, j, tipo, nivel;
 	nivel = st->floor;
 	
 	ITENS tiposTocha[2] = {
-		{'L', 10}, //mudem a luminosidade como quiserem //luz
-		{'l', 5},
+		{'L', 3}, //mudem a luminosidade como quiserem //luz
+		{'l', 2},
 	};
 	
-	ITENS tiposArma[5] = { 
+	ITENS tiposArma[4] = { 
 		{'g', 3}, //mudem o dano como quiserem //garfo
 		{'f', 5}, //faca
 		{'t', 7}, //tacho
@@ -555,35 +572,50 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	ITENS aumentaVida[1] = { 
 		{'v', 5}, 
 	};
+
+	ITENS tiposArmadilha[2] = {
+		{'A', 4},
+		{'a', 2},
+	};
 	
-	for (i=0; i<nivel; i++) {
-		tipo = nivel % 2;
-		gerarSpawn2(&tiposTocha[tipo],map,max);
-		gerarSpawn2(&tiposCura[tipo],map,max);
-		gerarSpawn2(&tiposCura[tipo],map,max);
+	ITENS aumentaRaio[2] = {
+		{'R', 2},
+		{'r', 1},
+	};
+	
+	for (i=0; i<3; i++) { //3 armas em cada nivel, qualidade aumenta a cada 5 niveis
+		tipo = nivel / 5;
+		if (tipo < 4) {tipo = 4;}
+		gerarSpawn2(&tiposArma[tipo],map,max);
 	}
-	
-	if (nivel == 1) gerarSpawn2(&tiposArma[0],map,max);
-	
-	if (nivel % 5 == 0) {
-		gerarSpawn2(&aumentaVida[1],map,max);
-		for (i=0; i<5; i++) {
-			gerarSpawn2(&tiposArma[nivel/5],map,max);
+
+	for (i=0; i<nivel; i++) { 
+		j=0;
+		tipo = 0;
+		if (nivel >= 10) {tipo=1;}
+		gerarSpawn2(&tiposArmadilha[tipo],map,max);
+		if (st->light <= 20) gerarSpawn2(&tiposTocha[tipo],map,max); //so aparece tochas se tiver menos de 20 de luz
+		if (st->radius <= 8) gerarSpawn2(&aumentaRaio[tipo],map,max);
+		while (j<3) {
+			gerarSpawn2(&tiposCura[tipo],map,max); 
+			j++;
 		}
 	}
+	
+	gerarSpawn2(&aumentaVida[1],map,max); //1 aumentavida por nivel
 }
 
 void apanhaItem(STATE *st,MAP *map) {
 	int i;
-	char tipoItem[9] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h', 'v'};
+	char tipoItem[13] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h', 'v', 'A', 'a', 'R', 'r'};
 	int nivel = st->floor;
 
 	ITENS tiposTocha[2] = {
-		{'L', 10}, //mudem a luminosidade como quiserem //luz
-		{'l', 5},
+		{'L', 3}, //mudem a luminosidade como quiserem //luz
+		{'l', 2},
 	};
 	
-	ITENS tiposArma[5] = { 
+	ITENS tiposArma[4] = { 
 		{'g', 3}, //mudem o dano como quiserem //garfo
 		{'f', 5}, //faca
 		{'t', 7}, //tacho
@@ -599,16 +631,53 @@ void apanhaItem(STATE *st,MAP *map) {
 		{'v', 5}, 
 	};
 
+	ITENS tiposArmadilha[2] = {
+		{'A', 4},
+		{'a', 2},
+	};
 	
+	ITENS aumentaRaio[2] = {
+		{'R', 2},
+		{'r', 1},
+	};
 
-		for (i=0; i<9; i++) {
-			if (map->cord[st->playerX][st->playerY] == tipoItem[i]) {
-				if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 20) {st->light = 20;} else {st->light += tiposTocha[i].funcionalidade;}}
-				if (i==2 || i==3 || i==4 || i==5) st->damage += tiposArma[i-2].funcionalidade;
-				if (i==6 || i==7) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-6].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-6].funcionalidade;}}
-				if (i==8) st->maxhealth += aumentaVida[i-8].funcionalidade;
-				map->cord[st->playerX][st->playerY] = '.';
-			}
+	for (i=0; i<9; i++) {
+		if (map->cord[st->playerX][st->playerY] == tipoItem[i]) {
+			if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 20) {st->light = 20;} else {st->light += tiposTocha[i].funcionalidade;}}
+			if (i==2 || i==3 || i==4 || i==5) st->damage += tiposArma[i-2].funcionalidade;
+			if (i==6 || i==7) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-6].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-6].funcionalidade;}}
+			if (i==8) st->maxhealth += aumentaVida[i-8].funcionalidade;
+			if (i==9 || i==10) st->health -= tiposArmadilha[i-9].funcionalidade; //adicionar morte
+			if (i==11 || i==12) st->radius += aumentaRaio[i-11].funcionalidade; //adicionar raio maximo
+			map->cord[st->playerX][st->playerY] = '.';
 		}
+	}
 	
+}
+
+void bossAttackSpawn (MOBS *boss,MAP *map) {
+    int i;
+    MOBS mob;
+
+    MOBS tiposMobs[5] = {
+        {'C', 10, 2,2,0,0},
+        {'S', 20, 5,2,0,0},
+        {'D', 30, 8,3,0,0},
+		{'M', 45, 10,4,0,0},
+    };
+
+	for (i=0;i<49;i++) {
+		if (map->mobs[i].nome == '\0') {break;}
+	}
+        mob.nome = tiposMobs[2].nome;
+		mob.dano = tiposMobs[2].dano + 10;
+		mob.vida = tiposMobs[2].vida + 20;
+			
+        int randx = rand() % 6;
+		int randy = rand() % 6;
+		mob.posx = boss->posx + randx;
+		mob.posy = boss->posy + randy;
+
+		map->mobs[i] = mob;
+
 }

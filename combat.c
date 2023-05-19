@@ -6,6 +6,7 @@
 
 #include "mapa.h"
 #include "state.h"
+#include "changer.h"
 
 void atacar (STATE *st, MAP *map,int raio){
     int i,j,k;
@@ -38,31 +39,57 @@ void atacar (STATE *st, MAP *map,int raio){
     }
     
 }
-
-void mobatacar(STATE* st, MOBS mob, int raio) {
+void mobatacar(STATE* st,MAP *map, MOBS *mob, int raio,WINDOW *wnd) {
     int i, j, playerx, playery;
-    int mobx = mob.posx;
-    int moby = mob.posy;
-
+    int mobx = mob->posx;
+    int moby = mob->posy;
     for (i = -raio; i <= raio; i++) {
         if (mobx + i < 0 || mobx + i >= 500) {
-            continue;
-        }
+            continue;}
         for (j = -raio; j <= raio; j++) {
             if (moby + j < 0 || moby + j >= 500) {
-                continue;
-            }
+                continue;}
+                map->seen[mobx+i][moby+j] = 4;
             playerx = st->playerX;
             playery = st->playerY;
-
             if (playerx == mobx + i && playery == moby + j) {
-                st->health -= mob.dano;
+                st->health -= mob->dano;
+                    if (st->health <= 0) {
+
+                        player_death(st,wnd);
+
+                    }
             }
         }
     }
 }
 
-void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob) {
+/*void mobatacar2(STATE* st,MAP *map, MOBS *mob, WINDOW *wnd) {
+
+    int i, j,raio = mob->raio;
+    int mobx = mob->posx;
+    int moby = mob->posy;
+
+    for (i = -raio; i <= raio; i++) {
+        for (j = -raio; j <= raio; j++) {
+
+            map->seen[mobx+i][moby+j] = 4;
+
+            if (st->playerX == mobx + i && st->playerY == moby + j) {
+                st->health -= mob->dano;
+
+                    if (st->health <= 0) {
+
+                        player_death(st,wnd);
+
+                    }
+
+            }
+        }
+    }
+}*/
+
+void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd) {
     int i;
     int dx = 0, dy = 0;
 
@@ -84,14 +111,15 @@ void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob) {
 
         map->seen[targetX][targetY] = 4;
 
-            if (targetX == st->playerX && targetY == st->playerY) {
+        if (targetX == st->playerX && targetY == st->playerY) {
 
-                st->health -= mob->dano;
-                if (st->health <= 0) {
+            st->health -= mob->dano;
+            if (st->health <= 0) {
 
-                    // PLAYER DEATH
-                }
+                player_death(st,wnd);
+
             }
+        }
 
     }
 }
@@ -115,7 +143,8 @@ void atacardir(int dir, MAP* map, STATE* st) {
 
         int targetX = st->playerX + (i * dx);
         int targetY = st->playerY + (i * dy);
-
+        map->seen[targetX][targetY] = 3;
+        if (map->cord[targetX][targetY] == '#') break;
 
         for (k = 1; k < 50; k++) {
             if (targetX == map->mobs[k].posx && targetY == map->mobs[k].posy) {
@@ -132,6 +161,126 @@ void atacardir(int dir, MAP* map, STATE* st) {
             }
         }
 
-        map->seen[targetX][targetY] = 3;
+    }
+}
+
+void bossAttackdir (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
+    int i,j;
+    int dx = 0, dy = 0;
+
+    
+
+
+    for (j=1;j<5;j++) {
+
+        if (j == 1) {
+            dx = -1;
+            dy = 0;
+        } else if (j == 2) {
+            dy = -1;
+            dx=0;
+        } else if (j == 3) { 
+            dy = 1;
+            dx=0;
+        } else if (j == 4) {
+            dx = 1;
+            dy=0;
+        }
+
+        for (i = 0; i <= 20; i++) {
+
+            int targetX = mob->posx + (i * dx);
+            int targetY = mob->posy + (i * dy);
+            map->seen[targetX][targetY] = 4;
+            if (map->cord[targetX][targetY] == '#') break;
+
+                if (targetX == st->playerX && targetY == st->playerY) {
+
+                    st->health -= mob->dano;
+                    if (st->health <= 0) {
+
+                        player_death(st,wnd);
+
+                    }
+                }
+            
+        }
+    }
+
+
+
+}
+
+void bossAttackdia (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
+
+    int i,j;
+    int dx = 0, dy = 0;
+
+    
+
+
+    for (j=1;j<5;j++) {
+
+        if (j == 1) {
+            dx = -1;
+            dy = 1;
+        } else if (j == 2) {
+            dy = -1;
+            dx=1;
+        } else if (j == 3) { 
+            dy = 1;
+            dx=1;
+        } else if (j == 4) {
+            dx = -1;
+            dy=-1;
+        }
+
+        for (i = 0; i <= 20; i++) {
+
+            int targetX = mob->posx + (i * dx);
+            int targetY = mob->posy + (i * dy);
+            map->seen[targetX][targetY] = 4;
+            if (map->cord[targetX][targetY] == '#') break;
+
+                if (targetX == st->playerX && targetY == st->playerY) {
+
+                    st->health -= mob->dano;
+                    if (st->health <= 0) {
+
+                        player_death(st,wnd);
+
+                    }
+                }
+            
+        }
+    }
+}
+
+void bossAttackcir (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
+    int i, j;
+    int mobx = mob->posx;
+    int moby = mob->posy;
+
+    for (i = -3; i <= 3; i++) {
+        if (mobx + i < 0 || mobx + i >= 500) {
+            continue;
+        }
+        for (j = -3; j <= 3; j++) {
+            if (moby + j < 0 || moby + j >= 500) {
+                continue;
+            }
+            map->seen[mobx+i][moby+j] = 4;
+
+            if (st->playerX == mobx + i && st->playerY == moby + j) {
+                st->health -= mob->dano;
+
+                    if (st->health <= 0) {
+
+                        player_death(st,wnd);
+
+                    }
+
+            }
+        }
     }
 }

@@ -45,11 +45,13 @@ void radiusdistance (MAP *map, STATE *st,int radius);
 
 void gerarMobs (MAP *map, POS max, STATE* st);
 
-void atualizarPos (STATE *st,MOBS *mob, MAP *map);
+void atualizarPos (STATE *st,MOBS *mob, MAP *map,WINDOW *wnd);
 
 void gerarSpawn(MOBS *s,MAP *map,POS max);
+void gerarBossSpawn(MOBS *s, MAP *map, POS max);
 
 void randomPos (MOBS *mob, MAP *map);
 void gerarSpawn2(ITENS *s,MAP *map,POS max);
 void gerarItem(MAP *map, POS max, STATE* st);
 void apanhaItem(STATE *st,MAP *map);
+void bossAttackSpawn (MOBS *boss,MAP *map);
