@@ -37,7 +37,8 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "files.associations": {
     "unistd.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "cmath": "c"
   },
   "C_Cpp.errorSquiggles": "enabled"
 }

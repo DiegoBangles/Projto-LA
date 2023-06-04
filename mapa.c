@@ -7,6 +7,7 @@
 
 #include "mapa.h"
 #include "combat.h"
+#include "changer.h"
 
 int vizinhanca (MAP *map,int x,int y,int n) {
 
@@ -335,17 +336,17 @@ void gerarBossSpawn(MOBS *s, MAP *map, POS max) {
 }
 
 void gerarMobs (MAP *map, POS max, STATE* st) {
-    int i, j, k, numMobs, nivel, tipomob;
+    int i, k, numMobs, nivel, tipomob;
     MOBS mob;
 
     nivel = st->floor;
 
     MOBS tiposMobs[5] = {
-        {'C', 10, 2,2,0,0},
-        {'S', 20, 5,2,0,0},
-        {'D', 30, 8,3,0,0},
-		{'M', 45, 10,4,0,0},
-		{'P', 50, 15,10,0,0},
+        {'C', 10, 5,2,0,0},
+        {'S', 20, 8,2,0,0},
+        {'D', 30, 10,3,0,0},
+		{'M', 45, 15,4,0,0},
+		{'P', 50, 30,10,0,0},
     };
     
     if (nivel == 25) {
@@ -357,24 +358,9 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
         gerarBossSpawn(&mob,map,max);
 		map->mobs[49] = mob;
-
-	} else if (nivel % 15 == 0 && nivel>1) {
-		numMobs = 2;
-
-		for (j=0; j<numMobs; j++) {
-
-            mob.nome = tiposMobs[3].nome;
-			mob.dano = tiposMobs[3].dano + nivel*2;
-			mob.vida = tiposMobs[3].vida + nivel*2;
-			
-            map->mobs[j] = mob;
-            gerarSpawn(&mob,map,max);
-		}
 	}
-    else 
-	{
-		if (nivel % 6 == 0) {
-			numMobs = nivel/2;
+    else if (nivel == 5 || nivel == 10) {
+			numMobs = nivel;
 
 			for (k=0; k<numMobs; k++) {
 				
@@ -400,13 +386,13 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				}
 			}
 		}
-		else
+	else
 		{
 			numMobs = nivel+2;
 			
 			for (i=0; i<numMobs; i++) {
 				tipomob = rand() % (nivel / 5 + 1);
-				if (tipomob >= 4) {tipomob = 3;}
+				if (tipomob >= 3) {tipomob = 2;}
 
 				mob.nome = tiposMobs[tipomob].nome;
 				mob.dano = tiposMobs[tipomob].dano + nivel;
@@ -416,7 +402,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				gerarSpawn(&mob,map,max);
 			}
     	}
-	}
+	
 }
 
 void atualizarPos(STATE* st, MOBS* mob, MAP* map,WINDOW *wnd) {
@@ -549,12 +535,12 @@ void gerarSpawn2(ITENS *s,MAP *map,POS max) {
 
 
 void gerarItem(MAP *map, POS max, STATE* st) { 
-	int i, j, tipo, nivel;
+	int i, j, tipo=0, nivel;
 	nivel = st->floor;
 	
 	ITENS tiposTocha[2] = {
-		{'L', 3}, //mudem a luminosidade como quiserem //luz
-		{'l', 2},
+		{'l', 2}, //mudem a luminosidade como quiserem //luz
+		{'L', 3},
 	};
 	
 	ITENS tiposArma[4] = { 
@@ -565,27 +551,27 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	};
 	
 	ITENS tiposCura[2] = { 
-		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
 		{'h', 2*nivel}, //cura
+		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
 	};
 	
 	ITENS aumentaVida[1] = { 
-		{'v', 5}, 
+		{'v', 10}, 
 	};
 
 	ITENS tiposArmadilha[2] = {
-		{'A', 4},
-		{'a', 2},
+		{'a', 2 * nivel},
+		{'A', 4 * nivel},
 	};
 	
 	ITENS aumentaRaio[2] = {
-		{'R', 2},
 		{'r', 1},
+		{'R', 2},
 	};
 	
 	for (i=0; i<3; i++) { //3 armas em cada nivel, qualidade aumenta a cada 5 niveis
 		tipo = nivel / 5;
-		if (tipo < 4) {tipo = 4;}
+		if (tipo > 4) {tipo = 3;}
 		gerarSpawn2(&tiposArma[tipo],map,max);
 	}
 
@@ -611,8 +597,8 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	int nivel = st->floor;
 
 	ITENS tiposTocha[2] = {
-		{'L', 3}, //mudem a luminosidade como quiserem //luz
-		{'l', 2},
+		{'l', 2}, //mudem a luminosidade como quiserem //luz
+		{'L', 3},
 	};
 	
 	ITENS tiposArma[4] = { 
@@ -628,7 +614,7 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	};
 	
 	ITENS aumentaVida[1] = { 
-		{'v', 5}, 
+		{'v', 10}, 
 	};
 
 	ITENS tiposArmadilha[2] = {
@@ -648,7 +634,7 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 			if (i==6 || i==7) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-6].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-6].funcionalidade;}}
 			if (i==8) st->maxhealth += aumentaVida[i-8].funcionalidade;
 			if (i==9 || i==10) {st->health -= tiposArmadilha[i-9].funcionalidade; if (st->health <= 0) {player_death(st,wnd);}}
-			if (i==11 || i==12) {if (st->light + tiposTocha[i].funcionalidade > 8) {st->radius = 8;} else {st->radius += aumentaRaio[i-11].funcionalidade;}} //adicionar raio maximo
+			if (i==11 || i==12) {if (st->radius + aumentaRaio[i-11].funcionalidade > 8) {st->radius = 8;} else {st->radius += aumentaRaio[i-11].funcionalidade;}} //adicionar raio maximo
 			map->cord[st->playerX][st->playerY] = '.';
 		}
 	}

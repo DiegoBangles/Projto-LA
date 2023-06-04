@@ -18,13 +18,18 @@ void do_movement_action(STATE *st, int dx, int dy,MAP *map,POS max,WINDOW *wnd) 
 		st->playerY += dy;
 	}
 	if (map->cord[st->playerX][st->playerY] == 'D') {
-		if (st->floor == 24) {
+		if (st->floor == 14) {
 			st->floor++;
 			change_level_final(map,st,max,wnd);
-		}
+		} else {
 			change_level(map,st,max,wnd);
 			st->floor++;
-	} else if (map->cord[st->playerX][st->playerY] != '.') {
+		}
+	}
+	else if (map->cord[st->playerX][st->playerY] == 'K') {
+		game_won (st,wnd);
+	}
+	else if (map->cord[st->playerX][st->playerY] != '.') {
 		apanhaItem(st,map,wnd);
 	}
 }
@@ -59,6 +64,7 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case 's': atacardir(4,map,st); break;
 		case 'p': st->light++; break;
 		case 'l': st->floor++; break;
+		case 'm': wclear(wnd); st->floor=1; break;
 		case 'z': change_level(map,st,max,wnd); break;
 		case 'x': change_level_final(map,st,max,wnd); break;
 		case 'o': player_death(st,wnd); break;
@@ -117,8 +123,22 @@ int main() {
 	st.health = 100;
 	st.maxhealth = 100;
 	st.damage = 2;
-	st.radius = 3;
-	st.floor = 1;
+	st.radius = 2;
+	st.floor = -1;
+	st.mobskilled = 0;
+
+	printw("O teu objetivo é derrotar o malvado Chefe Passadini! Mas cuidado, os seus empregados farão desta tarefa muito difícil!! Passa por todas as portas para chegares até ao nível final, onde encontrarás o grande vilão.\n");
+	printw("\nPara te moveres, usa o teclado numérico ou as setas. Para te moveres para cima, usa 8. Para te moveres para baixo, usa 2, e assim por adiante. Podes também mover-te na diagonal, sê estratégico!\n");
+	printw("\nPara atacar em diferentes direções, usa as teclas (w,a,s,d). Se quiseres podes atacar em todas as direções simultaneamente (e), mas tens menor alcance!\n");
+	printw("\nCuidado com as armadilhas (a,A), elas causam dano!\n"); 
+	printw("\nComeças com um raio de visão de 5. Para o aumentar, apanha as tochas (L,l).\n");
+	printw("Começas com um raio de dano de 2. Para o aumentar, apanha os suplementos de alcance (R,r).\n");
+	printw("Começas com dano de 2. Para o aumentar, apanha melhores armas (g,f,t,c). Estas surgem a cada 5 níveis.\n");
+	printw("Se levares algum tipo de dano, apanha as curas (m,h).\n");
+	printw("A tua vida máxima é 10. Para a aumentar, apanha os suplementos de vida (v). Estes surgem a cada 5 níveis.\n");
+	printw("\nComeças no nível 1. O jogo tem 15 níveis.\n");
+	printw("\nAperta M para iniciar o jogo.\n");
+	printw("Boa Sorte.\n");
 
 	while(1) {
 
@@ -136,11 +156,11 @@ int main() {
 
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] > 0) {
-					if (map.cord[i][j]== 'L' || map.cord[i][j]== 'l') {
+					if (map.cord[i][j] == 'L' || map.cord[i][j] == 'l') {
 						attron(COLOR_PAIR(COLOR_YELLOW));
 						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_YELLOW));
-					} else if (map.cord[i][j]== 'g' || map.cord[i][j]== 'f'|| map.cord[i][j]== 't'|| map.cord[i][j]== 'c') {
+					} else if (map.cord[i][j] == 'g' || map.cord[i][j] == 'f'|| map.cord[i][j] == 't'|| map.cord[i][j] == 'c') {
 						attron(COLOR_PAIR(COLOR_RED));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_RED));
@@ -160,7 +180,7 @@ int main() {
 						attron(COLOR_PAIR(COLOR_CYAN));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_CYAN));
-					} else if (map.cord[i][j]== 'D') {
+					} else if (map.cord[i][j] == 'D') {
 						attron(COLOR_PAIR(COLOR_MAGENTA));
 						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_MAGENTA));
@@ -182,7 +202,6 @@ int main() {
 							attron(COLOR_PAIR(COLOR_RED));
 							mvaddch(i, j, map.cord[i][j] | A_BOLD);
 							attroff(COLOR_PAIR(COLOR_RED));
-
 							map.seen[i][j] = 2;
 						}
 					}

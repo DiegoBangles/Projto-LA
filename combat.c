@@ -24,13 +24,7 @@ void atacar (STATE *st, MAP *map,int raio){
                         (map->mobs[k].vida) -=  (st->damage);
 
                         if (map->mobs[k].vida <= 0) {
-
-                            map->mobs[k].nome = '\0';
-                            map->mobs[k].vida = 0;
-                            map->mobs[k].dano = 0;
-                            map->mobs[k].posx = 0;
-                            map->mobs[k].posy = 0;
-                            //FAZER MOB DROPAR ALGUMA COISA
+                            mobdeath(map->mobs[k],map,st);
                         }
 
                     }
@@ -151,12 +145,7 @@ void atacardir(int dir, MAP* map, STATE* st) {
 
                 map->mobs[k].vida -= st->damage;
                 if (map->mobs[k].vida <= 0) {
-                    map->mobs[k].nome = '\0';
-                    map->mobs[k].vida = 0;
-                    map->mobs[k].dano = 0;
-                    map->mobs[k].posx = 0;
-                    map->mobs[k].posy = 0;
-                    // FAZER MOB DROPAR ALGUMA COISA
+                    mobdeath(map->mobs[k],map,st);
                 }
             }
         }
@@ -285,7 +274,33 @@ void bossAttackcir (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
     }
 }
 
-void mobDrop (MAP *map,MOB *mob,STATE *st) {
+void mobDeath (MOBS *mob,MAP *map,STATE *st) {
+
+    if (mob->nome == 'M') {
+        //mob drop miniboss
+    } else if (mob->nome == 'P') {
+        bossDrop(mob,map);
+    } else {
+        //mob drop resto
+    }
+
+    mob->nome = '\0';
+    mob->vida = 0;
+    mob->dano = 0;
+    mob->posx = 0;
+    mob->posy = 0;
+
+    st->mobskilled++;
+
+}
+
+void bossDrop (MOBS *mob,MAP *map) {
+
+    map->cord[mob->posx][mob->posy] = 'K';
+
+}
+
+/*void mobDrop (MAP *map,MOB *mob,STATE *st) {
 
     char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
 
@@ -305,4 +320,4 @@ void mobDropBtr (MAP *map,MOB *mob,STATE *st) {
     map->cord[mob->posx][mob->posy] = tipoItem[random];
 
 
-}
+}*/

@@ -18,6 +18,7 @@ typedef struct state {
 	int damage;
 	int radius;
 	int floor;
+	int mobskilled;
 } STATE;
 
 typedef struct pos {
