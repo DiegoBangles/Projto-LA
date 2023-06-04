@@ -79,7 +79,7 @@ void gerarMapa (MAP *map,POS max) {
 
 				int random = rand() % 100; //0-9
 
-				if (random <= 44) {map->cord[i][j] = '#';} 
+				if (random <= 46) {map->cord[i][j] = '#';} 
 				else {map->cord[i][j] = '.';}
 				
 
