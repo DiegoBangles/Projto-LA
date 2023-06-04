@@ -53,5 +53,5 @@ void gerarBossSpawn(MOBS *s, MAP *map, POS max);
 void randomPos (MOBS *mob, MAP *map);
 void gerarSpawn2(ITENS *s,MAP *map,POS max);
 void gerarItem(MAP *map, POS max, STATE* st);
-void apanhaItem(STATE *st,MAP *map);
+void apanhaItem(STATE *st,MAP *map,WINDOW *wnd);
 void bossAttackSpawn (MOBS *boss,MAP *map);

@@ -25,7 +25,7 @@ void do_movement_action(STATE *st, int dx, int dy,MAP *map,POS max,WINDOW *wnd) 
 			change_level(map,st,max,wnd);
 			st->floor++;
 	} else if (map->cord[st->playerX][st->playerY] != '.') {
-		apanhaItem(st,map);
+		apanhaItem(st,map,wnd);
 	}
 }
 
@@ -126,9 +126,8 @@ int main() {
 
 		move(nrows - 1, 0);
 		attron(COLOR_PAIR(COLOR_BLUE));
-		printw("(%d, %d) %d %d HP: %d/%d Light: %d Dmg: %d Floor: %d", st.playerX, st.playerY, ncols, nrows, st.health,st.maxhealth,st.light,st.damage,st.floor);
+		printw("(%d, %d) %d %d HP: %d/%d Light: %d Dmg: %d Radius: %d Floor: %d", st.playerX, st.playerY, ncols, nrows, st.health,st.maxhealth,st.light,st.damage,st.radius,st.floor);
 		attroff(COLOR_PAIR(COLOR_BLUE));
-		attron(COLOR_PAIR(COLOR_WHITE));
 		radius(&map,&st,st.light);
 		radius2(&map,&st,st.light);
 		radiusdistance(&map,&st,20);
@@ -138,69 +137,52 @@ int main() {
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] > 0) {
 					if (map.cord[i][j]== 'L' || map.cord[i][j]== 'l') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
 						attron(COLOR_PAIR(COLOR_YELLOW));
 						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_YELLOW));
-						attron(COLOR_PAIR(COLOR_WHITE));
 					} else if (map.cord[i][j]== 'g' || map.cord[i][j]== 'f'|| map.cord[i][j]== 't'|| map.cord[i][j]== 'c') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
 						attron(COLOR_PAIR(COLOR_RED));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_RED));
-						attron(COLOR_PAIR(COLOR_WHITE)); 
-					} else if (map.cord[i][j]== 'm' || map.cord[i][j]== 'h') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j] == 'm' || map.cord[i][j]== 'h') {
 						attron(COLOR_PAIR(COLOR_GREEN));
-						mvaddch(i, j, map.cord[i][j] || A_BOLD);
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_GREEN));
-						attron(COLOR_PAIR(COLOR_WHITE));
-					} else if (map.cord[i][j]== 'v') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j] == 'v') {
 						attron(COLOR_PAIR(COLOR_GREEN));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_GREEN));
-						attron(COLOR_PAIR(COLOR_WHITE));
-					} else if (map.cord[i][j]== 'A' || map.cord[i][j]== 'a') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j] == 'A' || map.cord[i][j]== 'a') {
 						attron(COLOR_PAIR(COLOR_MAGENTA));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_MAGENTA));
-						attron(COLOR_PAIR(COLOR_WHITE));
-					} else if (map.cord[i][j]== 'R' || map.cord[i][j]== 'r') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
+					} else if (map.cord[i][j] == 'R' || map.cord[i][j]== 'r') {
 						attron(COLOR_PAIR(COLOR_CYAN));
 						mvaddch(i, j, map.cord[i][j]);
 						attroff(COLOR_PAIR(COLOR_CYAN));
-						attron(COLOR_PAIR(COLOR_WHITE));
 					} else if (map.cord[i][j]== 'D') {
-						attroff(COLOR_PAIR(COLOR_WHITE));
 						attron(COLOR_PAIR(COLOR_MAGENTA));
-						mvaddch(i, j, map.cord[i][j] || A_BOLD);
+						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_MAGENTA));
-						attron(COLOR_PAIR(COLOR_WHITE));
 					} else {
 						if (map.seen[i][j] == 1) {
+							attron(COLOR_PAIR(COLOR_WHITE));
 							mvaddch(i, j, map.cord[i][j] | A_BOLD);
-						} else if (map.seen[i][j] == 2) {
 							attroff(COLOR_PAIR(COLOR_WHITE));
+						} else if (map.seen[i][j] == 2) {
 							attron(COLOR_PAIR(COLOR_YELLOW));
 							mvaddch(i, j, map.cord[i][j]);
 							attroff(COLOR_PAIR(COLOR_YELLOW));
-							attron(COLOR_PAIR(COLOR_WHITE));
 						} else if (map.seen[i][j] == 3) {
-							attroff(COLOR_PAIR(COLOR_WHITE));
 							attron(COLOR_PAIR(COLOR_CYAN));
 							mvaddch(i, j, map.cord[i][j] | A_BOLD);
 							attroff(COLOR_PAIR(COLOR_CYAN));
-							attron(COLOR_PAIR(COLOR_WHITE));
 							map.seen[i][j] = 2;
 						} else if (map.seen[i][j] == 4) {
-							attroff(COLOR_PAIR(COLOR_WHITE));
 							attron(COLOR_PAIR(COLOR_RED));
 							mvaddch(i, j, map.cord[i][j] | A_BOLD);
 							attroff(COLOR_PAIR(COLOR_RED));
-							attron(COLOR_PAIR(COLOR_WHITE));
+
 							map.seen[i][j] = 2;
 						}
 					}

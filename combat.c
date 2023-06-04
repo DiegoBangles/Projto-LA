@@ -284,3 +284,25 @@ void bossAttackcir (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
         }
     }
 }
+
+void mobDrop (MAP *map,MOB *mob,STATE *st) {
+
+    char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
+
+    int random = rand() % 8;
+
+    map->cord[mob->posx][mob->posy] = tipoItem[random];
+
+
+}
+
+void mobDropBtr (MAP *map,MOB *mob,STATE *st) {
+
+    char tipoItem[9] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h', 'v'};
+
+    int random = rand() % 13;
+
+    map->cord[mob->posx][mob->posy] = tipoItem[random];
+
+
+}
