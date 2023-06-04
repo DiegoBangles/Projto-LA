@@ -120,7 +120,7 @@ int main() {
 	gerarItem(&map,max,&st);
 
 
-	st.light = 5;
+	st.light = 7;
 	st.health = 100;
 	st.maxhealth = 100;
 	st.damage = 2;
@@ -136,7 +136,7 @@ int main() {
 	printw("\nExistem 5 tipos de inimigos todos com cor vermelho claro e estão divididos nestas categorias:\n");
 	printw("\nOs cozinheiros júnior com a letra J, os garde mangers com a letra G, os sous chefs com a letra S, os chefs com a letra C (que aparece a cada 5 níveis) e o grande Passadini com a letra P que será, se chegares lá, o boss final. Derrota-o e descobrirás o que tem na sua receita secreta!"); 
 	printw("\nCuidado com as armadilhas exibidas com as letras (a,A) e cor roxa, elas causam dano!\n"); 
-	printw("\nComeças com um raio de visão de 5. Para o aumentar, apanha as tochas exibidas com as letras (L,l) e cor amarela.\n");
+	printw("\nComeças com um raio de visão de 7. Para o aumentar, apanha as tochas exibidas com as letras (L,l) e cor amarela.\n");
 	printw("\nComeças com um raio de dano de 2. Para o aumentar, apanha os suplementos de alcance exibidos com as letras (R,r) e cor azul.\n");
 	printw("\nComeças com dano de 2. Para o aumentar, apanha melhores armas exibidas com as letras (g,f,t,c) e cor vermelho claro. Estas surgem todos níveis e melhoaram a cada 3.\n");
 	printw("\nA tua vida máxima é 100.\n");

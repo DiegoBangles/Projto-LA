@@ -310,14 +310,14 @@ void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao
 
     if (random == 0){
         if (nivel >= 10) {
-                if (st->light + 3 > 20){
+                if (st->light + 3 > 25){
                     random = (rand() % 6)+2;
                     map->cord[mob->posx][mob->posy] = tipoItem[random];
                 }
                 else map->cord[mob->posx][mob->posy] = tipoItem[0];
         }
         else {
-            if (st->light + 2 > 20){
+            if (st->light + 2 > 25){
                 random = (rand() % 6)+2;
                 map->cord[mob->posx][mob->posy] = tipoItem[random];
             }

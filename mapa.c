@@ -571,7 +571,7 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	
 	for (i=0; i<3; i++) { //3 armas em cada nivel, qualidade aumenta a cada 5 niveis
 		tipo = nivel / 3;
-		if (tipo > 4) {tipo = 3;}
+		if (tipo > 3) {tipo = 3;}
 		gerarSpawn2(&tiposArma[tipo],map,max);
 	}
 
@@ -580,15 +580,16 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 		tipo = 0;
 		if (nivel >= 10) {tipo=1;}
 		gerarSpawn2(&tiposArmadilha[tipo],map,max);
-		if (st->light < 20) {gerarSpawn2(&tiposTocha[tipo],map,max);gerarSpawn2(&tiposTocha[tipo],map,max); gerarSpawn2(&tiposTocha[tipo],map,max);} //so aparece tochas se tiver menos de 20 de luz
+		if (st->light < 25) {gerarSpawn2(&tiposTocha[tipo],map,max);gerarSpawn2(&tiposTocha[tipo],map,max); gerarSpawn2(&tiposTocha[tipo],map,max);} //so aparece tochas se tiver menos de 20 de luz
 		if (st->radius < 8) gerarSpawn2(&aumentaRaio[tipo],map,max);
 		while (j<3) {
-			gerarSpawn2(&tiposCura[tipo],map,max); 
+			tipo = rand() % 2; 
+			gerarSpawn2(&tiposCura[tipo],map,max);
 			j++;
 		}
 	}
 	
-	gerarSpawn2(&aumentaVida[1],map,max); //1 aumentavida por nivel
+	gerarSpawn2(&aumentaVida[0],map,max); //1 aumentavida por nivel
 }
 
 void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
@@ -629,7 +630,7 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 
 	for (i=0; i<13; i++) {
 		if (map->cord[st->playerX][st->playerY] == tipoItem[i]) {
-			if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 20) {st->light = 20;} else {st->light += tiposTocha[i].funcionalidade;}}
+			if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 25) {st->light = 25;} else {st->light += tiposTocha[i].funcionalidade;}}
 			if (i==2 || i==3 || i==4 || i==5) st->damage += tiposArma[i-2].funcionalidade;
 			if (i==6 || i==7) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-6].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-6].funcionalidade;}}
 			if (i==8) st->maxhealth += aumentaVida[i-8].funcionalidade;
