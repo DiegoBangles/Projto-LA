@@ -64,6 +64,7 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case 's': atacardir(4,map,st); break;
 		case 'p': st->light++; break;
 		case 'l': st->floor++; break;
+		case 'k': st->damage+=10;st->maxhealth+=10;st->health+=10; break;
 		case 'm': wclear(wnd); st->floor=1; break;
 		case 'z': change_level(map,st,max,wnd); break;
 		case 'x': change_level_final(map,st,max,wnd); break;
@@ -127,18 +128,22 @@ int main() {
 	st.floor = -1;
 	st.mobskilled = 0;
 
-	printw("O teu objetivo é derrotar o malvado Chefe Passadini! Mas cuidado, os seus empregados farão desta tarefa muito difícil!! Passa por todas as portas para chegares até ao nível final, onde encontrarás o grande vilão.\n");
+	printw("Es um ex-cozinheiro do malvado Chefe Passadini e para te vingares das atrocidades pelo qual ele te fez passar, o teu objetivo é derrotar o Chefe Passadini e roubar-lhe a sua receita secreta! Mas cuidado, os seus empregados farão desta tarefa muito difícil!! Passa por todas as portas para chegares até ao nível final, onde encontrarás o grande vilão.\n"); 
+	printw("\nAo passares pelas portas exibidas com a letra D e cor rosa irás aumentar o nível e a dificuldade aumenta");                                                                                                     
+	printw("\nComeças no nível 1. O jogo tem 15 níveis.\n") ;                    
 	printw("\nPara te moveres, usa o teclado numérico ou as setas. Para te moveres para cima, usa 8. Para te moveres para baixo, usa 2, e assim por adiante. Podes também mover-te na diagonal, sê estratégico!\n");
 	printw("\nPara atacar em diferentes direções, usa as teclas (w,a,s,d). Se quiseres podes atacar em todas as direções simultaneamente (e), mas tens menor alcance!\n");
-	printw("\nCuidado com as armadilhas (a,A), elas causam dano!\n"); 
-	printw("\nComeças com um raio de visão de 5. Para o aumentar, apanha as tochas (L,l).\n");
-	printw("Começas com um raio de dano de 2. Para o aumentar, apanha os suplementos de alcance (R,r).\n");
-	printw("Começas com dano de 2. Para o aumentar, apanha melhores armas (g,f,t,c). Estas surgem a cada 5 níveis.\n");
-	printw("Se levares algum tipo de dano, apanha as curas (m,h).\n");
-	printw("A tua vida máxima é 10. Para a aumentar, apanha os suplementos de vida (v). Estes surgem a cada 5 níveis.\n");
-	printw("\nComeças no nível 1. O jogo tem 15 níveis.\n");
+	printw("\nExistem 5 tipos de inimigos todos com cor vermelho claro e estão divididos nestas categorias:\n");
+	printw("\nOs cozinheiros júnior com a letra J, os garde mangers com a letra G, os sous chefs com a letra S, os chefs com a letra C (que aparece a cada 5 níveis) e o grande Passadini com a letra P que será, se chegares lá, o boss final. Derrota-o e descobrirás o que tem na sua receita secreta!"); 
+	printw("\nCuidado com as armadilhas exibidas com as letras (a,A) e cor roxa, elas causam dano!\n"); 
+	printw("\nComeças com um raio de visão de 5. Para o aumentar, apanha as tochas exibidas com as letras (L,l) e cor amarela.\n");
+	printw("\nComeças com um raio de dano de 2. Para o aumentar, apanha os suplementos de alcance exibidos com as letras (R,r) e cor azul.\n");
+	printw("\nComeças com dano de 2. Para o aumentar, apanha melhores armas exibidas com as letras (g,f,t,c) e cor vermelho claro. Estas surgem todos níveis e melhoaram a cada 3.\n");
+	printw("\nA tua vida máxima é 100.\n");
+	printw("\nSe levares algum tipo de dano, apanha as curas exibidas com as letras (m,h) e cor verde claro.\n");
+	printw("\nPara voltar a meter a vida no máximo, apanha os suplementos de vida exibido com a letra (v) e cor verde escuro. Estes surgem todos níveis.\n");
 	printw("\nAperta M para iniciar o jogo.\n");
-	printw("Boa Sorte.\n");
+	printw("\nBoa Sorte.\n");
 
 	while(1) {
 
@@ -156,7 +161,30 @@ int main() {
 
 			for (j=0;j<ncols;j++) {
 				if (map.seen[i][j] > 0) {
-					if (map.cord[i][j] == 'L' || map.cord[i][j] == 'l') {
+					if (map.cord[i][j] == 'K') {
+						int random = rand() % 5;
+						if (random == 0) {
+							attron(COLOR_PAIR(COLOR_YELLOW));
+							mvaddch(i, j, map.cord[i][j] | A_STANDOUT);
+							attroff(COLOR_PAIR(COLOR_YELLOW));
+						} else if (random == 1) {
+							attron(COLOR_PAIR(COLOR_RED));
+							mvaddch(i, j, map.cord[i][j] | A_STANDOUT);
+							attroff(COLOR_PAIR(COLOR_RED));
+						} else if (random == 2) {
+							attron(COLOR_PAIR(COLOR_GREEN));
+							mvaddch(i, j, map.cord[i][j] | A_STANDOUT);
+							attroff(COLOR_PAIR(COLOR_GREEN));
+						} else if (random == 3) {
+							attron(COLOR_PAIR(COLOR_MAGENTA));
+							mvaddch(i, j, map.cord[i][j] | A_STANDOUT);
+							attroff(COLOR_PAIR(COLOR_MAGENTA));
+						} else if (random == 4) {
+							attron(COLOR_PAIR(COLOR_CYAN));
+							mvaddch(i, j, map.cord[i][j] | A_STANDOUT);
+							attroff(COLOR_PAIR(COLOR_CYAN));
+						}
+					} else if (map.cord[i][j] == 'L' || map.cord[i][j] == 'l') {
 						attron(COLOR_PAIR(COLOR_YELLOW));
 						mvaddch(i, j, map.cord[i][j] | A_BOLD);
 						attroff(COLOR_PAIR(COLOR_YELLOW));

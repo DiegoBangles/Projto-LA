@@ -65,10 +65,10 @@ void player_death (STATE *st,WINDOW *wnd) {
 }
 
 void game_won (STATE *st,WINDOW *wnd) {
-
+	st->floor = -1;
 	wclear(wnd);
 	wclear(wnd);
 
-	printw("Parabens! Conseguiste infiltrar as cavernas do Passadini, derrota-lo e obter a receita secreta dele.\nO mundo sera um melhor lugar sem aquele louco!\nAgora podes abrir o teu restaurante e cozinhar sem ser incomodado!\nStats finais:\nHP: %d/%d\nLight: %d\nDmg: %d\nRadius: %d\nMobs mortos: %d\n\nObrigado por jogar o nosso jogo. Projeto feito por:\n Hugo Marques, a102934\n Jose Afonso Miranda, a102933\n Diogo Dias, a102943\n Claudia Faria, a10",st->health,st->maxhealth,st->light,st->damage,st->radius,st->mobskilled);
+	printw("Parabens! Conseguiste infiltrar as cavernas do Passadini, derrota-lo e obter a receita secreta dele.\nO mundo sera um melhor lugar sem aquele louco!\nAgora podes abrir o teu restaurante e cozinhar sem ser incomodado!\nStats finais:\nHP: %d/%d\nLight: %d\nDmg: %d\nRadius: %d\nMobs mortos: %d\n\nObrigado por jogar o nosso jogo. Projeto feito por:\n Hugo Marques, a102934\n Jose Afonso Miranda, a102933\n Diogo Dias, a102943\n Claudia Faria, a105531",st->health,st->maxhealth,st->light,st->damage,st->radius,st->mobskilled);
 
 }

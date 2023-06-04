@@ -7,6 +7,7 @@
 #include "mapa.h"
 #include "state.h"
 #include "changer.h"
+#include "combat.h"
 
 void atacar (STATE *st, MAP *map,int raio){
     int i,j,k;
@@ -24,7 +25,7 @@ void atacar (STATE *st, MAP *map,int raio){
                         (map->mobs[k].vida) -=  (st->damage);
 
                         if (map->mobs[k].vida <= 0) {
-                            mobdeath(map->mobs[k],map,st);
+                            mobDeath(&map->mobs[k],map,st);
                         }
 
                     }
@@ -145,7 +146,7 @@ void atacardir(int dir, MAP* map, STATE* st) {
 
                 map->mobs[k].vida -= st->damage;
                 if (map->mobs[k].vida <= 0) {
-                    mobdeath(map->mobs[k],map,st);
+                    mobDeath(&map->mobs[k],map,st);
                 }
             }
         }
@@ -276,7 +277,7 @@ void bossAttackcir (STATE *st,MOBS *mob,MAP *map,WINDOW *wnd) {
 
 void mobDeath (MOBS *mob,MAP *map,STATE *st) {
 
-    if (mob->nome == 'M') {
+    if (mob->nome == 'C') {
         //mob drop miniboss
     } else if (mob->nome == 'P') {
         bossDrop(mob,map);

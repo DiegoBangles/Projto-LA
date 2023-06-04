@@ -342,14 +342,14 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
     nivel = st->floor;
 
     MOBS tiposMobs[5] = {
-        {'C', 10, 5,2,0,0},
-        {'S', 20, 8,2,0,0},
-        {'D', 30, 10,3,0,0},
-		{'M', 45, 15,4,0,0},
+        {'J', 10, 5,2,0,0},
+        {'G', 20, 8,2,0,0},
+        {'S', 30, 10,3,0,0},
+		{'C', 45, 15,4,0,0},
 		{'P', 50, 30,10,0,0},
     };
     
-    if (nivel == 25) {
+    if (nivel >= 15) {
 
 
 		mob.nome = tiposMobs[4].nome;
@@ -385,7 +385,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 					gerarSpawn(&mob,map,max);
 				}
 			}
-		}
+	}
 	else
 		{
 			numMobs = nivel+2;
@@ -401,7 +401,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				map->mobs[i] = mob;
 				gerarSpawn(&mob,map,max);
 			}
-    	}
+    }
 	
 }
 
@@ -570,7 +570,7 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	};
 	
 	for (i=0; i<3; i++) { //3 armas em cada nivel, qualidade aumenta a cada 5 niveis
-		tipo = nivel / 5;
+		tipo = nivel / 3;
 		if (tipo > 4) {tipo = 3;}
 		gerarSpawn2(&tiposArma[tipo],map,max);
 	}
@@ -609,8 +609,8 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	};
 	
 	ITENS tiposCura[2] = { 
-		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
 		{'h', 2*nivel}, //cura
+		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
 	};
 	
 	ITENS aumentaVida[1] = { 
@@ -618,13 +618,13 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	};
 
 	ITENS tiposArmadilha[2] = {
-		{'A', 4},
-		{'a', 2},
+		{'a', 2 * nivel},
+		{'A', 4 * nivel},
 	};
 	
 	ITENS aumentaRaio[2] = {
-		{'R', 2},
 		{'r', 1},
+		{'R', 2},
 	};
 
 	for (i=0; i<13; i++) {
