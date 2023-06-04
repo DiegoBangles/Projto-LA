@@ -79,7 +79,7 @@ void gerarMapa (MAP *map,POS max) {
 
 				int random = rand() % 100; //0-9
 
-				if (random <= 48) {map->cord[i][j] = '#';} 
+				if (random <= 44) {map->cord[i][j] = '#';} 
 				else {map->cord[i][j] = '.';}
 				
 
@@ -536,7 +536,8 @@ void gerarSpawn2(ITENS *s,MAP *map,POS max) {
 
 void gerarItem(MAP *map, POS max, STATE* st) { 
 	int i, j, tipo=0, nivel;
-	nivel = st->floor +1;
+	nivel = st->floor;
+	if (nivel == 1) {nivel++;}
 	
 	ITENS tiposTocha[2] = {
 		{'l', 1}, //mudem a luminosidade como quiserem //luz
@@ -633,7 +634,7 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 			if (i==0 || i==1) {if (st->light + tiposTocha[i].funcionalidade > 25) {st->light = 25;} else {st->light += tiposTocha[i].funcionalidade;}}
 			if (i==2 || i==3 || i==4 || i==5) st->damage += tiposArma[i-2].funcionalidade;
 			if (i==6 || i==7) {if (st->health == st->maxhealth) {return;} else if (st->health + tiposCura[i-6].funcionalidade > st->maxhealth) {st->health = st->maxhealth;} else {st->health += tiposCura[i-6].funcionalidade;}}
-			if (i==8) st->maxhealth += aumentaVida[i-8].funcionalidade;
+			if (i==8) {st->maxhealth += aumentaVida[i-8].funcionalidade; st->health += aumentaVida[i-8].funcionalidade;}
 			if (i==9 || i==10) {st->health -= tiposArmadilha[i-9].funcionalidade; if (st->health <= 0) {player_death(st,wnd);}}
 			if (i==11 || i==12) {if (st->radius + aumentaRaio[i-11].funcionalidade > 8) {st->radius = 8;} else {st->radius += aumentaRaio[i-11].funcionalidade;}} //adicionar raio maximo
 			map->cord[st->playerX][st->playerY] = '.';
