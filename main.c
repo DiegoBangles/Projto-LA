@@ -133,15 +133,15 @@ int main() {
 	printw("\nComeças no nível 1. O jogo tem 15 níveis.\n") ;                    
 	printw("\nPara te moveres, usa o teclado numérico ou as setas. Para te moveres para cima, usa 8. Para te moveres para baixo, usa 2, e assim por adiante. Podes também mover-te na diagonal, sê estratégico!\n");
 	printw("\nPara atacar em diferentes direções, usa as teclas (w,a,s,d). Se quiseres podes atacar em todas as direções simultaneamente (e), mas tens menor alcance!\n");
-	printw("\nExistem 5 tipos de inimigos todos com cor vermelho claro e estão divididos nestas categorias:\n");
+	printw("\nExistem 5 tipos de inimigos todos com cor vermelho claro e estão divididos nestas categorias:");
 	printw("\nOs cozinheiros júnior com a letra J, os garde mangers com a letra G, os sous chefs com a letra S, os chefs com a letra C (que aparece a cada 5 níveis) e o grande Passadini com a letra P que será, se chegares lá, o boss final. Derrota-o e descobrirás o que tem na sua receita secreta!"); 
 	printw("\nCuidado com as armadilhas exibidas com as letras (a,A) e cor roxa, elas causam dano!\n"); 
 	printw("\nComeças com um raio de visão de 7. Para o aumentar, apanha as tochas exibidas com as letras (L,l) e cor amarela.\n");
 	printw("\nComeças com um raio de dano de 2. Para o aumentar, apanha os suplementos de alcance exibidos com as letras (R,r) e cor azul.\n");
-	printw("\nComeças com dano de 2. Para o aumentar, apanha melhores armas exibidas com as letras (g,f,t,c) e cor vermelho claro. Estas surgem todos níveis e melhoaram a cada 3.\n");
+	printw("\nComeças com dano de 2. Para o aumentar, apanha melhores armas exibidas com as letras (g,f,t,c) e cor vermelho claro. Estas surgem todos níveis e melhoram a cada 3.\n");
 	printw("\nA tua vida máxima é 100.\n");
-	printw("\nSe levares algum tipo de dano, apanha as curas exibidas com as letras (m,h) e cor verde claro.\n");
-	printw("\nPara voltar a meter a vida no máximo, apanha os suplementos de vida exibido com a letra (v) e cor verde escuro. Estes surgem todos níveis.\n");
+	printw("\nSe levares algum tipo de dano, apanha as curas exibidas com as letras (m,h) e cor verde claro. Aviso que se tiveres a vida cheia, nao as consegues apanhar\n");
+	printw("\nPara aumentar a vida máxima, apanha o suplemento de vida exibido com a letra (v) e cor verde escuro. Estes surgem todos níveis.\n");
 	printw("\nAperta M para iniciar o jogo.\n");
 	printw("\nBoa Sorte.\n");
 

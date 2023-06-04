@@ -346,7 +346,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
         {'G', 20, 8,2,0,0},
         {'S', 30, 10,3,0,0},
 		{'C', 45, 15,4,0,0},
-		{'P', 100, 30,10,0,0},
+		{'P', 300, 30,10,0,0},
     };
     
     if (nivel >= 15) {
@@ -354,7 +354,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 		mob.nome = tiposMobs[4].nome;
 		mob.dano = tiposMobs[4].dano;
-		mob.vida = tiposMobs[4].vida*2;
+		mob.vida = tiposMobs[4].vida;
 
         gerarBossSpawn(&mob,map,max);
 		map->mobs[49] = mob;
@@ -648,10 +648,10 @@ void bossAttackSpawn (MOBS *boss,MAP *map) {
     MOBS mob;
 
     MOBS tiposMobs[5] = {
-        {'C', 10, 2,2,0,0},
-        {'S', 20, 5,2,0,0},
-        {'D', 30, 8,3,0,0},
-		{'M', 45, 10,4,0,0},
+        {'J', 10, 5,2,0,0},
+        {'G', 20, 8,2,0,0},
+        {'S', 30, 10,3,0,0},
+		{'C', 45, 15,4,0,0},
     };
 
 	for (i=0;i<49;i++) {
