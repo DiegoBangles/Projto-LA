@@ -346,7 +346,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
         {'G', 20, 8,2,0,0},
         {'S', 30, 10,3,0,0},
 		{'C', 45, 15,4,0,0},
-		{'P', 50, 30,10,0,0},
+		{'P', 100, 30,10,0,0},
     };
     
     if (nivel >= 15) {
@@ -354,7 +354,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 		mob.nome = tiposMobs[4].nome;
 		mob.dano = tiposMobs[4].dano;
-		mob.vida = tiposMobs[4].vida;
+		mob.vida = tiposMobs[4].vida*2;
 
         gerarBossSpawn(&mob,map,max);
 		map->mobs[49] = mob;
@@ -367,7 +367,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				if (k==1 || k==2) {
 					mob.nome = tiposMobs[3].nome;
 					mob.dano = tiposMobs[3].dano + nivel;
-					mob.vida = tiposMobs[3].vida + nivel;
+					mob.vida = tiposMobs[3].vida + nivel*2;
 					
 					map->mobs[k] = mob;
 					gerarSpawn(&mob,map,max);
@@ -379,7 +379,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 					mob.nome = tiposMobs[tipomob].nome;
 					mob.dano = tiposMobs[tipomob].dano + nivel;
-					mob.vida = tiposMobs[tipomob].vida + nivel;
+					mob.vida = tiposMobs[tipomob].vida + nivel*2;
 					
 					map->mobs[k] = mob;
 					gerarSpawn(&mob,map,max);
@@ -396,7 +396,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 				mob.nome = tiposMobs[tipomob].nome;
 				mob.dano = tiposMobs[tipomob].dano + nivel;
-				mob.vida = tiposMobs[tipomob].vida + nivel;
+				mob.vida = tiposMobs[tipomob].vida + nivel*2;
 				
 				map->mobs[i] = mob;
 				gerarSpawn(&mob,map,max);
@@ -536,18 +536,18 @@ void gerarSpawn2(ITENS *s,MAP *map,POS max) {
 
 void gerarItem(MAP *map, POS max, STATE* st) { 
 	int i, j, tipo=0, nivel;
-	nivel = st->floor;
+	nivel = st->floor +1;
 	
 	ITENS tiposTocha[2] = {
-		{'l', 2}, //mudem a luminosidade como quiserem //luz
-		{'L', 3},
+		{'l', 1}, //mudem a luminosidade como quiserem //luz
+		{'L', 2},
 	};
 	
 	ITENS tiposArma[4] = { 
-		{'g', 3}, //mudem o dano como quiserem //garfo
-		{'f', 5}, //faca
-		{'t', 7}, //tacho
-		{'c', 10}, //colher de pau
+		{'g', 2}, //mudem o dano como quiserem //garfo
+		{'f', 3}, //faca
+		{'t', 5}, //tacho
+		{'c', 7}, //colher de pau
 	};
 	
 	ITENS tiposCura[2] = { 
@@ -580,8 +580,8 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 		tipo = 0;
 		if (nivel >= 10) {tipo=1;}
 		gerarSpawn2(&tiposArmadilha[tipo],map,max);
-		if (st->light <= 20) gerarSpawn2(&tiposTocha[tipo],map,max); //so aparece tochas se tiver menos de 20 de luz
-		if (st->radius <= 8) gerarSpawn2(&aumentaRaio[tipo],map,max);
+		if (st->light < 20) {gerarSpawn2(&tiposTocha[tipo],map,max);gerarSpawn2(&tiposTocha[tipo],map,max); gerarSpawn2(&tiposTocha[tipo],map,max);} //so aparece tochas se tiver menos de 20 de luz
+		if (st->radius < 8) gerarSpawn2(&aumentaRaio[tipo],map,max);
 		while (j<3) {
 			gerarSpawn2(&tiposCura[tipo],map,max); 
 			j++;
@@ -597,15 +597,15 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	int nivel = st->floor;
 
 	ITENS tiposTocha[2] = {
-		{'l', 2}, //mudem a luminosidade como quiserem //luz
-		{'L', 3},
+		{'l', 1}, //mudem a luminosidade como quiserem //luz
+		{'L', 2},
 	};
 	
 	ITENS tiposArma[4] = { 
-		{'g', 3}, //mudem o dano como quiserem //garfo
-		{'f', 5}, //faca
-		{'t', 7}, //tacho
-		{'c', 10}, //colher de pau
+		{'g', 2}, //mudem o dano como quiserem //garfo
+		{'f', 3}, //faca
+		{'t', 5}, //tacho
+		{'c', 7}, //colher de pau
 	};
 	
 	ITENS tiposCura[2] = { 
