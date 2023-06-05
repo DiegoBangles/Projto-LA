@@ -65,7 +65,7 @@ void update(STATE *st,MAP *map,POS max,WINDOW *wnd) {
 		case 'p': st->light++; break;
 		case 'l': st->floor++; break;
 		case 'k': st->damage+=10;st->maxhealth+=10;st->health+=10; break;
-		case 'm': if (st->floor == -1) {wclear(wnd); st->floor=1;} break;
+		case 'm': wclear(wnd); st->floor=1; break;
 		case 'z': change_level(map,st,max,wnd); break;
 		case 'x': change_level_final(map,st,max,wnd); break;
 		case 'o': player_death(st,wnd); break;
@@ -143,7 +143,7 @@ int main() {
 	printw("\nSe levares algum tipo de dano, apanha as curas exibidas com as letras (m,h) e cor verde claro. Aviso que se tiveres a vida cheia, nao as consegues apanhar\n");
 	printw("\nPara aumentar a vida máxima, apanha o suplemento de vida exibido com a letra (v) e cor verde escuro. Estes surgem todos níveis.\n");
 	printw("\nAperta M para iniciar o jogo.\n");
-	printw("\nBoa Sorte.\n");
+	printw("\nBoa Sorte!\n");
 
 	while(1) {
 

@@ -59,32 +59,7 @@ void mobatacar(STATE* st,MAP *map, MOBS *mob, int raio,WINDOW *wnd) {
     }
 }
 
-/*void mobatacar2(STATE* st,MAP *map, MOBS *mob, WINDOW *wnd) {
-
-    int i, j,raio = mob->raio;
-    int mobx = mob->posx;
-    int moby = mob->posy;
-
-    for (i = -raio; i <= raio; i++) {
-        for (j = -raio; j <= raio; j++) {
-
-            map->seen[mobx+i][moby+j] = 4;
-
-            if (st->playerX == mobx + i && st->playerY == moby + j) {
-                st->health -= mob->dano;
-
-                    if (st->health <= 0) {
-
-                        player_death(st,wnd);
-
-                    }
-
-            }
-        }
-    }
-}*/
-
-void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd) {
+/*void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd) {
     int i;
     int dx = 0, dy = 0;
 
@@ -117,7 +92,7 @@ void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd)
         }
 
     }
-}
+}*/
 
 void atacardir(int dir, MAP* map, STATE* st) {
     int i, k;
@@ -301,14 +276,13 @@ void bossDrop (MOBS *mob,MAP *map) {
 
 }
 
-void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao dropa luz, armas depende do nivel onde esta
-    if (map->cord[mob->posx][mob->posy] == '.') {
+void mobDrop (MAP *map,MOBS *mob,STATE *st) {
     int nivel = st->floor;
 
     char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
 
     int random = rand() % 3; //0=luz; 1=armas; 2= cura;
-    
+
     if (random == 0){
         if (nivel >= 10) {
                 if (st->light + 3 > 25){
@@ -344,10 +318,9 @@ void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao
         int random2 = (rand() % 2)+6;
         map->cord[mob->posx][mob->posy] = tipoItem[random2];
     }
-    }
 }
 
-void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verificar raio
+void mobDropBtr (MAP *map,MOBS *mob,STATE *st) {
     int count = 0;
     int i, j;
 
@@ -355,7 +328,7 @@ void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verifi
 
     for (i = mob->posx-1; i <= mob->posx+1 && count < 3; i++) {
         for (j = mob->posy-1; j <= mob->posy+1 && count < 3; j++) {
-            if (map->cord[i][j] == '.') {
+            if (map->cord[i][j] != '#') {
                 int random = rand() % 7;
 
                 if (tipoItem[random] == 'R') {
@@ -375,3 +348,7 @@ void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verifi
         }
     }
 }
+
+// ---
+// -M-
+// ---
