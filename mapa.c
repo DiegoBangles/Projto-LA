@@ -374,7 +374,7 @@ void gerarMobs (MAP *map, POS max, STATE *st) {
 				else
 				{
 					tipomob = rand() % (nivel / 5 + 1);
-					if (tipomob >= 4) {tipomob = 3;} //nao devia ser 2, uma vez que 3 e outro miniboss
+					if (tipomob >= 3) {tipomob = 2;}
 
 					mob.nome = tiposMobs[tipomob].nome;
 					mob.dano = tiposMobs[tipomob].dano + nivel;
