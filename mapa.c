@@ -354,7 +354,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 		mob.nome = tiposMobs[4].nome;
 		mob.dano = tiposMobs[4].dano;
-		mob.vida = tiposMobs[4].vida;
+		mob.vida = tiposMobs[4].vida + (st->damage);
 
         gerarBossSpawn(&mob,map,max);
 		map->mobs[49] = mob;
@@ -367,7 +367,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				if (k==1 || k==2) {
 					mob.nome = tiposMobs[3].nome;
 					mob.dano = tiposMobs[3].dano + nivel;
-					mob.vida = tiposMobs[3].vida + nivel*2;
+					mob.vida = tiposMobs[3].vida + nivel*2 + (st->damage/2);
 					
 					map->mobs[k] = mob;
 					gerarSpawn(&mob,map,max);
@@ -379,7 +379,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 					mob.nome = tiposMobs[tipomob].nome;
 					mob.dano = tiposMobs[tipomob].dano + nivel;
-					mob.vida = tiposMobs[tipomob].vida + nivel*2;
+					mob.vida = tiposMobs[tipomob].vida + nivel*2 + (st->damage/2);
 					
 					map->mobs[k] = mob;
 					gerarSpawn(&mob,map,max);
@@ -396,7 +396,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 
 				mob.nome = tiposMobs[tipomob].nome;
 				mob.dano = tiposMobs[tipomob].dano + nivel;
-				mob.vida = tiposMobs[tipomob].vida + nivel*2;
+				mob.vida = tiposMobs[tipomob].vida + nivel*2 + (st->damage/2);
 				
 				map->mobs[i] = mob;
 				gerarSpawn(&mob,map,max);
@@ -547,8 +547,8 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	ITENS tiposArma[4] = { 
 		{'g', 2}, //mudem o dano como quiserem //garfo
 		{'f', 3}, //faca
-		{'t', 5}, //tacho
-		{'c', 7}, //colher de pau
+		{'t', 4}, //tacho
+		{'c', 5}, //colher de pau
 	};
 	
 	ITENS tiposCura[2] = { 
@@ -606,8 +606,8 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	ITENS tiposArma[4] = { 
 		{'g', 2}, //mudem o dano como quiserem //garfo
 		{'f', 3}, //faca
-		{'t', 5}, //tacho
-		{'c', 7}, //colher de pau
+		{'t', 4}, //tacho
+		{'c', 5}, //colher de pau
 	};
 	
 	ITENS tiposCura[2] = { 
