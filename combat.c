@@ -277,6 +277,7 @@ void bossDrop (MOBS *mob,MAP *map) {
 }
 
 void mobDrop (MAP *map,MOBS *mob,STATE *st) {
+    if (map->cord[mob->posx][mob->posy] == '.') {
     int nivel = st->floor;
 
     char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
@@ -318,6 +319,7 @@ void mobDrop (MAP *map,MOBS *mob,STATE *st) {
         int random2 = (rand() % 2)+6;
         map->cord[mob->posx][mob->posy] = tipoItem[random2];
     }
+    }
 }
 
 void mobDropBtr (MAP *map,MOBS *mob,STATE *st) {
@@ -328,7 +330,7 @@ void mobDropBtr (MAP *map,MOBS *mob,STATE *st) {
 
     for (i = mob->posx-1; i <= mob->posx+1 && count < 3; i++) {
         for (j = mob->posy-1; j <= mob->posy+1 && count < 3; j++) {
-            if (map->cord[i][j] != '#') {
+            if (map->cord[i][j] == '.') {
                 int random = rand() % 7;
 
                 if (tipoItem[random] == 'R') {
