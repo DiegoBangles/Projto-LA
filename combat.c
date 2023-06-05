@@ -302,12 +302,13 @@ void bossDrop (MOBS *mob,MAP *map) {
 }
 
 void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao dropa luz, armas depende do nivel onde esta
+    if (map->cord[mob->posx][mob->posy] == '.') {
     int nivel = st->floor;
 
     char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
 
     int random = rand() % 3; //0=luz; 1=armas; 2= cura;
-
+    
     if (random == 0){
         if (nivel >= 10) {
                 if (st->light + 3 > 25){
@@ -343,6 +344,7 @@ void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao
         int random2 = (rand() % 2)+6;
         map->cord[mob->posx][mob->posy] = tipoItem[random2];
     }
+    }
 }
 
 void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verificar raio
@@ -353,7 +355,7 @@ void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verifi
 
     for (i = mob->posx-1; i <= mob->posx+1 && count < 3; i++) {
         for (j = mob->posy-1; j <= mob->posy+1 && count < 3; j++) {
-            if (map->cord[i][j] != '#') {
+            if (map->cord[i][j] == '.') {
                 int random = rand() % 7;
 
                 if (tipoItem[random] == 'R') {
