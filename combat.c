@@ -59,32 +59,7 @@ void mobatacar(STATE* st,MAP *map, MOBS *mob, int raio,WINDOW *wnd) {
     }
 }
 
-/*void mobatacar2(STATE* st,MAP *map, MOBS *mob, WINDOW *wnd) {
-
-    int i, j,raio = mob->raio;
-    int mobx = mob->posx;
-    int moby = mob->posy;
-
-    for (i = -raio; i <= raio; i++) {
-        for (j = -raio; j <= raio; j++) {
-
-            map->seen[mobx+i][moby+j] = 4;
-
-            if (st->playerX == mobx + i && st->playerY == moby + j) {
-                st->health -= mob->dano;
-
-                    if (st->health <= 0) {
-
-                        player_death(st,wnd);
-
-                    }
-
-            }
-        }
-    }
-}*/
-
-void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd) {
+/*void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd) {
     int i;
     int dx = 0, dy = 0;
 
@@ -117,7 +92,7 @@ void mobatacardir(int dir,int radius, MAP* map, STATE* st,MOBS* mob,WINDOW *wnd)
         }
 
     }
-}
+}*/
 
 void atacardir(int dir, MAP* map, STATE* st) {
     int i, k;
@@ -301,7 +276,7 @@ void bossDrop (MOBS *mob,MAP *map) {
 
 }
 
-void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao dropa luz, armas depende do nivel onde esta
+void mobDrop (MAP *map,MOBS *mob,STATE *st) {
     int nivel = st->floor;
 
     char tipoItem[8] = {'L', 'l', 'g', 'f', 't', 'c', 'm', 'h'};
@@ -345,7 +320,7 @@ void mobDrop (MAP *map,MOBS *mob,STATE *st) { //se o player tiver luz no max nao
     }
 }
 
-void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verificar raio
+void mobDropBtr (MAP *map,MOBS *mob,STATE *st) {
     int count = 0;
     int i, j;
 
@@ -373,3 +348,7 @@ void mobDropBtr (MAP *map,MOBS *mob,STATE *st) { //dano, vida max, raio //verifi
         }
     }
 }
+
+// ---
+// -M-
+// ---

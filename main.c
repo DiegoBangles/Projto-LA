@@ -143,7 +143,7 @@ int main() {
 	printw("\nSe levares algum tipo de dano, apanha as curas exibidas com as letras (m,h) e cor verde claro. Aviso que se tiveres a vida cheia, nao as consegues apanhar\n");
 	printw("\nPara aumentar a vida máxima, apanha o suplemento de vida exibido com a letra (v) e cor verde escuro. Estes surgem todos níveis.\n");
 	printw("\nAperta M para iniciar o jogo.\n");
-	printw("\nBoa Sorte.\n");
+	printw("\nBoa Sorte!\n");
 
 	while(1) {
 

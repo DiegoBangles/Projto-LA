@@ -335,7 +335,7 @@ void gerarBossSpawn(MOBS *s, MAP *map, POS max) {
     } else gerarBossSpawn(s,map,max);
 }
 
-void gerarMobs (MAP *map, POS max, STATE* st) {
+void gerarMobs (MAP *map, POS max, STATE *st) {
     int i, k, numMobs, nivel, tipomob;
     MOBS mob;
 
@@ -351,7 +351,6 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
     
     if (nivel >= 15) {
 
-
 		mob.nome = tiposMobs[4].nome;
 		mob.dano = tiposMobs[4].dano;
 		mob.vida = tiposMobs[4].vida;
@@ -360,11 +359,11 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 		map->mobs[49] = mob;
 	}
     else if (nivel == 5 || nivel == 10) {
-			numMobs = nivel;
+			numMobs = nivel; //4 ou 9 mobs
 
 			for (k=0; k<numMobs; k++) {
 				
-				if (k==1 || k==2) {
+				if (k==1 || k==2) { //k=0 nao spawna; miniboss
 					mob.nome = tiposMobs[3].nome;
 					mob.dano = tiposMobs[3].dano + nivel;
 					mob.vida = tiposMobs[3].vida + nivel*2;
@@ -375,7 +374,7 @@ void gerarMobs (MAP *map, POS max, STATE* st) {
 				else
 				{
 					tipomob = rand() % (nivel / 5 + 1);
-					if (tipomob >= 4) {tipomob = 3;}
+					if (tipomob >= 4) {tipomob = 3;} //nao devia ser 2, uma vez que 3 e outro miniboss
 
 					mob.nome = tiposMobs[tipomob].nome;
 					mob.dano = tiposMobs[tipomob].dano + nivel;
@@ -411,9 +410,6 @@ void atualizarPos(STATE* st, MOBS* mob, MAP* map,WINDOW *wnd) {
     if (map->distance[mob->posx][mob->posy] > 1) {
         direcaoX = st->playerX - mob->posx;
         direcaoY = st->playerY - mob->posy;
-		if (abs(direcaoX) == 0 || abs(direcaoY) == 0) {
-			//mobatacar(st,map,mob,1);
-		}
         if (abs(direcaoX) > abs(direcaoY)) {
             if (direcaoX > 0) {
                 if (map->cord[mob->posx + 1][mob->posy] != '#') {
@@ -540,12 +536,12 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	if (nivel == 1) {nivel++;}
 	
 	ITENS tiposTocha[2] = {
-		{'l', 1}, //mudem a luminosidade como quiserem //luz
+		{'l', 1}, //luz
 		{'L', 2},
 	};
 	
 	ITENS tiposArma[4] = { 
-		{'g', 2}, //mudem o dano como quiserem //garfo
+		{'g', 2}, //garfo
 		{'f', 3}, //faca
 		{'t', 5}, //tacho
 		{'c', 7}, //colher de pau
@@ -553,7 +549,7 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 	
 	ITENS tiposCura[2] = { 
 		{'h', 2*nivel}, //cura
-		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
+		{'m', 4*nivel}, //medikit
 	};
 	
 	ITENS aumentaVida[1] = { 
@@ -581,7 +577,7 @@ void gerarItem(MAP *map, POS max, STATE* st) {
 		tipo = 0;
 		if (nivel >= 10) {tipo=1;}
 		gerarSpawn2(&tiposArmadilha[tipo],map,max);
-		if (st->light < 25) {gerarSpawn2(&tiposTocha[tipo],map,max);gerarSpawn2(&tiposTocha[tipo],map,max); gerarSpawn2(&tiposTocha[tipo],map,max);} //so aparece tochas se tiver menos de 20 de luz
+		if (st->light < 25) {gerarSpawn2(&tiposTocha[tipo],map,max);gerarSpawn2(&tiposTocha[tipo],map,max); gerarSpawn2(&tiposTocha[tipo],map,max);} //so aparece tochas se tiver menos de 25 de luz
 		if (st->radius < 8) gerarSpawn2(&aumentaRaio[tipo],map,max);
 		while (j<3) {
 			tipo = rand() % 2; 
@@ -599,12 +595,12 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	int nivel = st->floor;
 
 	ITENS tiposTocha[2] = {
-		{'l', 1}, //mudem a luminosidade como quiserem //luz
+		{'l', 1}, //luz
 		{'L', 2},
 	};
 	
 	ITENS tiposArma[4] = { 
-		{'g', 2}, //mudem o dano como quiserem //garfo
+		{'g', 2}, //garfo
 		{'f', 3}, //faca
 		{'t', 5}, //tacho
 		{'c', 7}, //colher de pau
@@ -612,7 +608,7 @@ void apanhaItem(STATE *st,MAP *map,WINDOW *wnd) {
 	
 	ITENS tiposCura[2] = { 
 		{'h', 2*nivel}, //cura
-		{'m', 4*nivel}, //mudem o aumento de vida como quiserem	//medikit
+		{'m', 4*nivel}, //medikit
 	};
 	
 	ITENS aumentaVida[1] = { 
