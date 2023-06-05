@@ -105,13 +105,13 @@ int main() {
 
 	gerarMapa(&map,max);
 	fronteiras(&map,max);
-	ajustarMapa3(&map,max);
+	ajustarMapa3(&map,max);//apaga algumas paredes
+	ajustarMapa(&map,max); //ajustes de formar grupos de paredes
 	ajustarMapa(&map,max);
 	ajustarMapa(&map,max);
-	ajustarMapa(&map,max);
+	ajustarMapa2(&map,max);//limpa paredes soltas
 	ajustarMapa2(&map,max);
-	ajustarMapa2(&map,max);
-	ajustarMapa4(&map,max);
+	ajustarMapa4(&map,max);//abre alguns caminhos
 	fronteiras(&map,max);
 	
 	gerar(&st,&map,max);
