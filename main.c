@@ -120,7 +120,7 @@ int main() {
 	gerarItem(&map,max,&st);
 
 
-	st.light = 7;
+	st.light = 5;
 	st.health = 100;
 	st.maxhealth = 100;
 	st.damage = 2;
